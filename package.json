@@ -3,19 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "immutable": "^3.8.1",
+    "azure-storage": "^2.2.0",
+    "express": "^4.15.3",
     "parse-dashboard": "^1.0.28",
     "parse-server": "^2.4.2",
     "parse-server-azure-push": "^1.0.2",
     "parse-server-azure-storage": "^1.1.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "seamless-immutable": "^7.1.2"
+    "request": "^2.81.0"
   },
   "devDependencies": {
-    "react-scripts": "1.0.7"
+    "immutable": "^3.8.1",
+    "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2",
+    "react-scripts": "1.0.7",
+    "seamless-immutable": "^7.1.2"
   },
   "scripts": {
+    "server": "node ./index.js",
+    "mongo": "mongod --dbpath ./mongodb",
+    "dashboard": "parse-dashboard --appId bookgig --masterKey bookgig --serverURL 'http://localhost:1337/parse' --appName bookgig",
+    "start-all": "yarn server && yarn mongo && yarn dashboard",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
