@@ -24,8 +24,8 @@
     "server": "node ./index.js",
     "mongo": "mongod --dbpath ./mongodb",
     "dashboard": "parse-dashboard --appId bookgig --masterKey bookgig --serverURL 'http://localhost:1337/parse' --appName bookgig",
-    "start-all": "yarn server && yarn mongo && yarn dashboard",
-    "start": "react-scripts start",
+    "start": "npm-run-all -p server mongo dashboard",
+    "start-react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
