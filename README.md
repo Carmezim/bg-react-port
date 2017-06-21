@@ -2,15 +2,15 @@
 
 #### Getting it up and running
 
-1. `git clone git@bitbucket.org:lab19digital/authorslive.git && cd authorslive`
+1.`git clone git@bitbucket.org:lab19digital/authorslive.git && cd authorslive`
 
-2. `git fetch && git checkout bookgig-react`
+2.`git fetch && git checkout bookgig-react`
 
-3. `yarn install`
+3.`yarn install`
 
-4. `yarn start` and start developing :smiley:
+4.`yarn start` and start developing :smiley:
 
-5. To build just run `yarn build`
+5.To build simply run `yarn build`
 
 
 **Important Note**: the configuration is abstracted away. For now it may not be necessary
