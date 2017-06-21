@@ -19,7 +19,7 @@
 
 5.Download the [Mongo database dump](https://bitbucket.org/lab19digital/authorslive/downloads/dump)
 
-6.Run `yarn mongo` then in another terminal instance `mongorestore --archive=/path/to/dump/dumpfile --db bookgig` 
+6.Run `yarn mongo` then in another terminal instance `mongorestore --archive=/path/to/dump/dumpfile --db bookgig`
 
 7.`yarn start` and start developing!
 
@@ -49,7 +49,14 @@ Abstraction facades for external API (like backend servers).
 Store holds the global app state.
 All Redux-specific code goes here.
 
-The store directory is organized by domain, each containing:
+`/mongodb`
+All MongoDB related files.
+
+`/parse`
+All Parse Server files.
+
+
+##### The store directory is organized by domain, each containing:
 
 `/src/store/{domain}/reducer.js`
 Reducer (Reducers update state, receiving state+action and return new state) as a
@@ -57,6 +64,5 @@ default export with all selectors as named exports.
 
 `/src/store/{domain}/actions.js`
 All the domain action handlers (thunks and plain object creators).
-
 
 **Note**: The Readme will be continuously updated.
