@@ -9,7 +9,7 @@
 
 3.`yarn install`
 
-4.`yarn start` and start developing :smiley:
+4.`yarn start` and start developing!
 
 5.To build simply run `yarn build`
 
