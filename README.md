@@ -15,13 +15,15 @@
 
 3.`yarn install`
 
-4.`mkdir ./mongodb` (you can choose a different folder for mongo as long as you adapt the scripts on `package.json`)
+4.`mkdir ./mongodb`
 
-5.Download the [database dump](https://bitbucket.org/lab19digital/authorslive/downloads/dump) and run `mongorestore --archive=/path/to/dump --db bookgig` 
+5.Download the [Mongo database dump](https://bitbucket.org/lab19digital/authorslive/downloads/dump)
 
-6.`yarn start` and start developing!
+6.Run `yarn mongo` then in another terminal instance `mongorestore --archive=/path/to/dump/dumpfile --db bookgig` 
 
-7.To build simply run `yarn build`
+7.`yarn start` and start developing!
+
+8.To build simply run `yarn build`
 
 
 **Important Note**: Currently the configuration is abstracted away. At the moment it may not be necessary
