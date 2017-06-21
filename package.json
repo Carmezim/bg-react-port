@@ -24,7 +24,7 @@
   },
   "scripts": {
     "clean": "rm -rf build && mkdir build",
-    "server": "babel-node ./server/index.js",
+    "server": "babel-node ./parse/index.js",
     "mongo": "mongod --dbpath ./mongodb",
     "dashboard": "parse-dashboard --appId bookgig --masterKey bookgig --serverURL 'http://localhost:1337/parse' --appName bookgig",
     "start": "npm-run-all -p server mongo dashboard start-react",
