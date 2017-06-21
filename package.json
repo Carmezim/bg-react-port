@@ -7,6 +7,7 @@
     "babel-cli": "^6.24.1",
     "express": "^4.15.3",
     "parse-dashboard": "^1.0.28",
+    "parse-react": "^0.5.2",
     "parse-server": "^2.4.2",
     "parse-server-azure-push": "^1.0.2",
     "parse-server-azure-storage": "^1.1.0",
@@ -28,7 +29,8 @@
     "dashboard": "parse-dashboard --appId bookgig --masterKey bookgig --serverURL 'http://localhost:1337/parse' --appName bookgig",
     "start": "npm-run-all -p server mongo dashboard",
     "start-react": "react-scripts start",
-    "build": "react-scripts build",
+    "build-server": "babel -d ./build ./parse -s",
+    "build": "yarn clean && yarn build-server && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
