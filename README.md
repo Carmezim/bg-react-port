@@ -1,5 +1,11 @@
 ### BookGig React App
 
+#### Requirements
+
+* [Node](https://nodejs.org/en/)
+* [MongoDB](https://docs.mongodb.com/manual/installation/#mongodb-community-edition)
+* [Yarn](https://yarnpkg.com/lang/en/docs/install/) or NPM
+
 
 #### Getting it up and running
 
@@ -9,9 +15,13 @@
 
 3.`yarn install`
 
-4.`yarn start` and start developing!
+4.`mkdir ./mongodb` (you can choose a different folder for mongo as long as you adapt the scripts on `package.json`)
 
-5.To build simply run `yarn build`
+5.Download the [database dump](https://bitbucket.org/lab19digital/authorslive/downloads/dump) and run `mongorestore --archive=/path/to/dump --db bookgig` 
+
+6.`yarn start` and start developing!
+
+7.To build simply run `yarn build`
 
 
 **Important Note**: Currently the configuration is abstracted away. At the moment it may not be necessary
@@ -21,29 +31,29 @@ files will be exposed.
 
 #### Project directory structure:
 
--`/src/components`
+`/src/components`
 “Dumb” or Presentational React components (have no knowledge of Redux).
 Receive data through props or callbacks and don't have their own state.
 Examples: Pages, sidebars, lists etc.
 
--`/src/containers`
+`/src/containers`
 “Smart” or Container React components (connected to our Redux store).
 Usually don't have logic except for dispatching actions.
 
--`/src/services`
+`/src/services`
 Abstraction facades for external API (like backend servers).
 
--`/src/store`
+`/src/store`
 Store holds the global app state.
 All Redux-specific code goes here.
 
 The store directory is organized by domain, each containing:
 
--`/src/store/{domain}/reducer.js`
+`/src/store/{domain}/reducer.js`
 Reducer (Reducers update state, receiving state+action and return new state) as a
 default export with all selectors as named exports.
 
--`/src/store/{domain}/actions.js`
+`/src/store/{domain}/actions.js`
 All the domain action handlers (thunks and plain object creators).
 
 
