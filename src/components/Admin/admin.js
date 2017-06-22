@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Login from './login';
+import Login from '../Login/login';
 
 
 class Admin extends Component {
@@ -7,7 +7,7 @@ class Admin extends Component {
 		return(
 			<div>
 				<h1>Admin Page</h1>
-				<Login/>
+				<Login />
 			</div>
 		);
 	}
