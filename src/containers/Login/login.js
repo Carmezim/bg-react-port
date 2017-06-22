@@ -1,33 +1,46 @@
 import React, { Component } from 'react';
+import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
-import { login } from '../../'
+import LoginForm  from '../../components/LoginForm/loginForm';
 import './login.css';
 
+
 class Login extends Component {
+
+	constructor(props) {
+		super(props);
+		autoBind(this);
+	}
+
 	render() {
 		return (
-
-
-
-
-
-
 			<div className="login">
 				<form className="cd-form floating-labels login-form" method="post">
 
 					<fieldset>
 						<legend>Admin Console</legend>
-
 						{/*<div className="info" style="display:contents"><p></p></div>*/}
 
 						<div className="icon">
-							<label className="cd-label" for="cd-name">Username</label>
-							<input className="user" type="text" name="cd-name" id="login-username" required />
+							<LoginForm
+								label="Username"
+								labelfor="cd-name"
+								inputClass="user"
+								type="text"
+								id="login-username"
+								onChange={}
+							/>
 						</div>
 
 						<div className="icon">
-							<label className="cd-label" for="cd-lock">Password</label>
-							<input className="lock" type="password" name="cd-lock" id="login-password" required />
+							<LoginForm
+								label="Password"
+								labelfor="cd-lock"
+								inputClass="lock"
+								type="password"
+								id="login-password"
+								onChange={}
+							/>
 						</div>
 
 						<div>
