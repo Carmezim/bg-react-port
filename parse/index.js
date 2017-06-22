@@ -38,7 +38,7 @@ if( appEnv == 'local' ){
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 }
 
-var publicFolderPath = __dirname + '/web/public';
+var publicFolderPath = __dirname + '../public';
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
@@ -47,7 +47,7 @@ var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, parseServer);
 app.use(express.static(publicFolderPath));
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 1337;
 
 app.listen(port, function() {
   console.log('parse-server ' + appEnv + ' running on port ' + port + '.');
@@ -77,16 +77,3 @@ app.use(function(req, res, next) {
     res.setHeader('X-Frame-Options', 'DENY');
     return next();
 });
-
-// Require the app routes, injecting the express instance
-require("./web/cloud/routes.js")( app );
-require("./web/cloud/cloud.authors.js");
-require("./web/cloud/cloud.categories.js");
-
-// Require jobs
-require("./web/cloud/job.testevents.js");
-require("./web/cloud/job.fixcontenttype.js");
-require("./web/cloud/job.waterstonesimport.js");
-require("./web/cloud/job.uploadsimport.js");
-require("./web/cloud/job.generateauthors.js");
-require("./web/cloud/job.createcategories.js");
