@@ -13,6 +13,7 @@
     "parse-server-azure-storage": "^1.1.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-router-dom": "^4.1.1",
     "request": "^2.81.0"
   },
   "devDependencies": {
@@ -27,6 +28,7 @@
     "server": "babel-node ./parse/index.js",
     "mongo": "mongod --dbpath ./mongodb",
     "dashboard": "parse-dashboard --appId bookgig --masterKey bookgig --serverURL 'http://localhost:1337/parse' --appName bookgig",
+    "server-all": "npm-run-all -p mongo server dashboard",
     "start": "npm-run-all -p server mongo dashboard start-react",
     "start-react": "react-scripts start",
     "build-server": "babel -d ./build ./parse -s",
