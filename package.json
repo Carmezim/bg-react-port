@@ -14,12 +14,15 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.1.1",
+    "react-router-redux": "next",
+    "redux-thunk": "^2.2.0",
     "request": "^2.81.0"
   },
   "devDependencies": {
     "immutable": "^3.8.1",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.2",
+    "prop-types": "^15.5.10",
     "react-scripts": "1.0.7",
     "seamless-immutable": "^7.1.2"
   },
