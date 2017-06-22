@@ -21,7 +21,7 @@
 
 6.Run `yarn mongo` then in another terminal instance `mongorestore --archive=/path/to/dump/dumpfile --db bookgig`
 
-7.`yarn start` and start developing!
+7.`yarn start` and start developing! (while server-side is not implemented run `start-react`)
 
 8.To build simply run `yarn build`
 
