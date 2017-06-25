@@ -1,11 +1,13 @@
 {
   "name": "bookgig-react",
+  "author": "Adriano Carmezim Filho <carmezim.filho@gmail.com>",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "azure-storage": "^2.2.0",
     "babel-cli": "^6.24.1",
     "express": "^4.15.3",
+    "parse": "^1.9.2",
     "parse-dashboard": "^1.0.28",
     "parse-react": "^0.5.2",
     "parse-server": "^2.4.2",
@@ -13,9 +15,12 @@
     "parse-server-azure-storage": "^1.1.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "next",
-    "redux-thunk": "^2.2.0",
+    "redux": "^3.7.0",
+    "redux-form": "^6.8.0",
+    "redux-saga": "^0.15.4",
     "request": "^2.81.0"
   },
   "devDependencies": {
