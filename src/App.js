@@ -8,6 +8,7 @@ import Login from './login';
 import Signup from './signup';
 import './App.css';
 
+
 class App extends Component {
   render() {
     return (
@@ -17,7 +18,8 @@ class App extends Component {
         </div>
         <section className="app-body">
           {/*<Route path="/admin" component={Login} />*/}
-          <Route path="/" component={Signup} />
+          <Route path="/admin" component={Login} />
+          <Route exact path="/" component={Signup} />
         </section>
       </div>
     );
