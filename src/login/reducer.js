@@ -1,5 +1,5 @@
 import Immutable from 'seamless-immutable';
-import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './actionTypes';
+import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR, SET_CURRENT_LOGGED_USER, LOGOUT } from './actionTypes';
 
 
 const initialState = Immutable({
@@ -7,6 +7,7 @@ const initialState = Immutable({
 	successful: false,
 	messages: [],
 	errors: [],
+	token: null,
 });
 
 const reducer = (state = initialState, action = {}) => {
@@ -17,6 +18,7 @@ const reducer = (state = initialState, action = {}) => {
 				successful: false,
 				messages: [{ body: "Logging in...", time:  new Date() }],
 				errors: [],
+				token: null,
 			};
 
 		case LOGIN_SUCCESS:
@@ -25,6 +27,7 @@ const reducer = (state = initialState, action = {}) => {
 				successful: true,
 				messages: [],
 				errors: [],
+				token: null,
 			};
 
 		case LOGIN_ERROR:
@@ -36,6 +39,21 @@ const reducer = (state = initialState, action = {}) => {
 					time: new Date(),
 				}]),
 				messages: [],
+				token: null,
+			};
+
+		case SET_CURRENT_LOGGED_USER:
+			return {
+				...state,
+				messages: [{ body: "Setting current user...", time:  new Date() }],
+				token: action.token,
+			};
+
+		case LOGOUT:
+			return {
+				...state,
+				messages: [{ body: "Logging out...", time:  new Date() }],
+				token: null,
 			};
 
 		default:

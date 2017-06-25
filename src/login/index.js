@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 
 // import action
-import loginRequest from './actions';
+import { loginRequest } from './actions';
 
 
 class Login extends Component {
@@ -22,8 +22,8 @@ class Login extends Component {
 
 	// our custom 'submit' function that will be passed to Redux Form
 	// to handle the username and password submitted
-	submit = values => {
-		this.props.handleSubmit(values);
+	submit = (values) => {
+		this.props.loginRequest(values);
 	};
 
 	render () {
@@ -40,7 +40,7 @@ class Login extends Component {
 
 		return (
 			<div className="login">
-				<form className="cd-form floating-labels login-form" method="post">
+				<form className="cd-form floating-labels login-form" onSubmit={handleSubmit(this.submit)}>
 					<fieldset>
 						<legend>Admin Console</legend>
 
@@ -68,17 +68,18 @@ class Login extends Component {
 						<button action="submit">Login</button>
 					</fieldset>
 				</form>
-
 				{/* Some loggin handling */}
 				{!requesting && !!errors.length && (
 					console.error(`Failed to login due to: ${errors}`)
 				)}
 				{!requesting && !!messages.length && (
-					console.log(messages)
+					messages.map(message => {
+						console.log(`${message.body} at ${message.time}`)
+					})
 				)}
 				{requesting && <div>Logging in...</div>}
 				{!requesting && !successful && (
-					<div>Don't have a user yet? Create a user to login</div>
+					<div>Don't have an account yet? Create one to login.</div>
 					// not sure yet how this will be handled so just leaving this message
 					// AFAIK dashboard is used to create admin users(?)
 					// an option would be to link the user to a signup ?
@@ -90,15 +91,13 @@ class Login extends Component {
 
 
 // Getting only the piece of state we need for this component from the global state
-const mapStateToPros = state => ({
-	login: state.login
+const mapStateToProps = state => ({
+	login: state.login,
 });
-
 
 // Making the login state piece we've got and 'loginRequest' action
 // available in this.props within this component (Login)
-const connected = connect(mapStateToPros, { loginRequest })(Login);
-
+const connected = connect(mapStateToProps, { loginRequest })(Login);
 
 // In our state this form will be available in 'form.login'
 const formed = reduxForm({
