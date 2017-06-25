@@ -31,38 +31,38 @@ although to change the configuration run `yarn eject`.
 Notice once ejected, the project cannot return to its initial structure and all configuration
 files will be exposed.
 
-#### Project directory structure:
+#### Project structure:
 
-`/src/components`
-“Dumb” or Presentational React components (have no knowledge of Redux).
-Receive data through props or callbacks and don't have their own state.
-Examples: Pages, sidebars, lists etc.
+`/src/index.js` Entry point for the app
 
-`/src/containers`
-“Smart” or Container React components (connected to our Redux store).
-Usually don't have logic except for dispatching actions.
+`/src/App.js` App "Main Page" where all other pages (containers) are imported and routes handled.
+
+`/src/{containerName}/` We are organizing files by "topics" therefore all files related to
+a topic will be stored in the same container folder
+
+`/src/{containerName}/index` container component and all React code such as the view (JSX)
+
+`/src/{containerName}/reducer` where we manage the piece of state related to the container
+
+`/src/{containerName}/actions` all actions the container dispatches
+
+`/src/{containerName}/sagas` where sagas that watch for API related calls are stored
+
+`/src/{containerName}/actionTypes` constants for reducers/actions
+
 
 `/src/services`
-Abstraction facades for external API (like backend servers).
+Abstraction facades for external API (where Parse JS-SDK layer resides).
 
-`/src/store`
-Store holds the global app state.
-All Redux-specific code goes here.
+`/src/index-reducer` & `/src/index-sagas` where all reducers and sagas are included and exported
+altogether.
 
 `/mongodb`
 All MongoDB related files.
 
 `/parse`
-All Parse Server files.
+All Parse Server files.  
 
 
-##### The store directory is organized by domain, each containing:
-
-`/src/store/{domain}/reducer.js`
-Reducer (Reducers update state, receiving state+action and return new state) as a
-default export with all selectors as named exports.
-
-`/src/store/{domain}/actions.js`
-All the domain action handlers (thunks and plain object creators).
 
 **Note**: The Readme will be continuously updated.
