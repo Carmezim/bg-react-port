@@ -1,15 +1,46 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { applyMiddleware, createStore, compose } from 'redux';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+
+// Import parent component
+import App from './App';
 import './index.css';
 
-import * as reducers from './store/reducers';
-const store = createStore(combineReducers(reducers), applyMiddleware(thunk));
+
+// Import index reducer and sagas
+import IndexReducer from './index-reducer';
+import IndexSagas from './index.sagas';
+
+
+// Setup the middleware to watch between the Reducers and the Actions
+const sagaMiddleware = createSagaMiddleware();
+
+
+// IMPORTANT: `composeSetup` is for Redux DevTools Chrome extension
+// In case you don't want to use it do comment out the code below
+// and replace the `store` by
+// const store = createStore(
+//   IndexReducer,
+//   applyMiddleware(sagaMiddleware)
+// )
+
+const composeSetup = process.env.NODE_ENV !== 'production' && typeof window === 'object' &&
+	window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+	window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
+
+
+const store = createStore(
+	IndexReducer,
+	composeSetup(applyMiddleware(sagaMiddleware)), // allows redux devtools to watch sagas
+);
+
+
+// Begin Index Saga
+sagaMiddleware.run(IndexSagas);
 
 ReactDOM.render((
 	<Provider store={store}>
