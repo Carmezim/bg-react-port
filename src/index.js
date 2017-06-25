@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import { applyMiddleware, createStore, compose } from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import history from './history';
 import registerServiceWorker from './registerServiceWorker';
 
 // Import parent component
@@ -44,9 +45,9 @@ sagaMiddleware.run(IndexSagas);
 
 ReactDOM.render((
 	<Provider store={store}>
-		<BrowserRouter>
+		<Router history={history}>
 			<App />
-		</BrowserRouter>
+		</Router>
 	</Provider>
 ), document.getElementById('root'));
 registerServiceWorker();
