@@ -54,7 +54,7 @@ a topic will be stored in the same container folder
 `/src/services`
 Abstraction facades for external API (where Parse JS-SDK layer resides).
 
-`/src/index-reducer` & `/src/index-sagas` where all reducers and sagas are included then exported.
+`/src/index-reducer` & `/src/index-sagas` Where all reducers and sagas are included then exported.
 
 `/mongodb` All MongoDB related files.
 
