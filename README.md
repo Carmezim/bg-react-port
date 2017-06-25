@@ -1,13 +1,13 @@
-### BookGig React App
+## BookGig React App
 
-#### Requirements
+### Requirements
 
 * [Node](https://nodejs.org/en/)
 * [MongoDB](https://docs.mongodb.com/manual/installation/#mongodb-community-edition)
 * [Yarn](https://yarnpkg.com/lang/en/docs/install/) or NPM
 
 
-#### Getting it up and running
+### Getting it up and running
 
 1.`git clone git@bitbucket.org:lab19digital/authorslive.git && cd authorslive`
 
@@ -31,7 +31,7 @@ although to change the configuration run `yarn eject`.
 Notice once ejected, the project cannot return to its initial structure and all configuration
 files will be exposed.
 
-#### Project structure:
+### Project structure:
 
 `/src/index.js` Entry point for the app
 
@@ -40,28 +40,25 @@ files will be exposed.
 `/src/{containerName}/` We are organizing files by "topics" therefore all files related to
 a topic will be stored in the same container folder
 
-`/src/{containerName}/index` container component and all React code such as the view (JSX)
+`/src/{containerName}/index` CCntainer component and all React code such as the view (JSX)
 
-`/src/{containerName}/reducer` where we manage the piece of state related to the container
+`/src/{containerName}/reducer` Where we manage the piece of state related to the container
 
-`/src/{containerName}/actions` all actions the container dispatches
+`/src/{containerName}/actions` All actions the container dispatches
 
-`/src/{containerName}/sagas` where sagas that watch for API related calls are stored
+`/src/{containerName}/sagas` Where sagas that watch for API related calls are stored
 
-`/src/{containerName}/actionTypes` constants for reducers/actions
+`/src/{containerName}/actionTypes` Constants for reducers/actions
 
 
 `/src/services`
 Abstraction facades for external API (where Parse JS-SDK layer resides).
 
-`/src/index-reducer` & `/src/index-sagas` where all reducers and sagas are included and exported
-altogether.
+`/src/index-reducer` & `/src/index-sagas` where all reducers and sagas are included then exported.
 
-`/mongodb`
-All MongoDB related files.
+`/mongodb` All MongoDB related files.
 
-`/parse`
-All Parse Server files.  
+`/parse` All Parse Server files.  
 
 
 
