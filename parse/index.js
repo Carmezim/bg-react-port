@@ -1,79 +1,44 @@
-// Example express application adding the parse-server module to expose Parse
-// compatible API routes.
-var express = require('express');
-var ParseServer = require('parse-server').ParseServer;
-var AzureStorageAdapter = require('parse-server-azure-storage').AzureStorageAdapter;
-var ParseDashboard = require('parse-dashboard');
+import express from 'express';
+import { ParseServer } from 'parse-server';
+import ParseDashboard from 'parse-dashboard';
+import config from './environment';
 
-// Process handles environment creation
-if( process.env.ENVIRONMENT ){
-  var env = process.env;
-} else {
-  var env = require('./environment');
-}
+const app = express();
 
-var appEnv = env.ENVIRONMENT;
+const PORT = process.env.PORT || 1337;
 
-var parseServer = new ParseServer({
-  databaseURI: env.DATABASE_URI,
-  cloud: __dirname + '/web/cloud/main.js',
-  appId: env.APP_ID,
-  masterKey: env.MASTER_KEY, //Add your master key here. Keep it secret!
-  serverURL: env.PUBLIC_SERVER_URL,
-  publicServerURL : env.PUBLIC_SERVER_URL,
-  appName: env.APP_NAME,
-  // filesAdapter: new AzureStorageAdapter(
-  //   env.BLOB_ACCOUNT_NAME,
-  //   env.BLOB_CONTAINER,
-  //   { accessKey : env.BLOB_ACCESS_KEY, directAccess:true }
-  // ),
-  fileKey: env.FILE_KEY,
-  verbose : false //true
+const api = new ParseServer(config);
+
+app.use('/parse', api);
+
+const dashboard = new ParseDashboard({
+	apps: [
+		{
+			databaseURI: config.databaseURI,
+			serverURL: config.serverURL,
+			appId: config.appId,
+			masterKey: config.masterKey,
+			appName: config.appName
+		}
+	],
+	users: [
+		{
+			user: config.appId,
+			pass: config.masterKey
+		}
+	]
 });
 
-var app = express();
-
-// Fix SSL issues when using ssl locally
-if( appEnv == 'local' ){
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+if(process.env.NODE_ENV !== 'production') {
+	app.use('/dashboard', dashboard);
+	console.info(`dashboard available at http://localhost:${PORT}/dashboard`); // eslint-disable-line no-console
 }
 
-var publicFolderPath = __dirname + '../public';
+app.get('/', (req, res) => res.redirect(301, '/parse'));
 
-// Serve the Parse API on the /parse URL prefix
-var mountPath = process.env.PARSE_MOUNT || '/parse';
-
-// Serve static files from the specified public environment
-app.use(mountPath, parseServer);
-app.use(express.static(publicFolderPath));
-
-var port = process.env.PORT || 1337;
-
-app.listen(port, function() {
-  console.log('parse-server ' + appEnv + ' running on port ' + port + '.');
-});
-
-var dashboardConfig = {
-  apps: [
-    {
-      appId: env.APP_ID,
-      serverURL: env.PUBLIC_SERVER_URL,
-      masterKey: env.MASTER_KEY,
-      appName: env.APP_NAME
-    }
-  ],
-  users: [
-    {
-      user: env.APP_ID,
-      pass: env.MASTER_KEY
-    }
-  ]
-};
-
-app.use('/parse-dashboard', ParseDashboard(dashboardConfig, true));
-
-// Deny access to iframes
-app.use(function(req, res, next) {
-    res.setHeader('X-Frame-Options', 'DENY');
-    return next();
+app.listen(PORT, (err) => {
+	if(err) {
+		return console.error(err);
+	}
+	console.log(`parse api listening on ${config.serverURL}`);
 });
