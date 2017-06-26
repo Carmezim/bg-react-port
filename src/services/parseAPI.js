@@ -2,10 +2,9 @@ import Parse from 'parse';
 
 class ParseService {
 	constructor(props) {
-		Parse.initialize("APPLICATION_ID", "JAVASCRIPT_KEY");
+		Parse.initialize("bookgig");
 		Parse.serverURL = 'http://localhost:1337/parse';
 	}
-
 
 
 	// this function is called on 'sagas.js' and returns the response
@@ -18,16 +17,33 @@ class ParseService {
 	}
 
 
+	// create new user
+	createUSer(username, password) {
+		let user = new Parse.User();
+		user.set("username", username);
+		user.set("password", password);
+
+		user.signUp(null, {
+			success: function (user) {
+				console.log('New user successfully created');
+			},
+			error: function (user, error) {
+				alert(`Error: ${error.code} ${error.message}`)
+			}
+		});
+	}
+
+
 	// Log user in returning session token on a successful call.
 	login(username, password) {
+
 		Parse.User.logIn(username, password, {
 			success: function(user) {
-				alert('Login successful');
-				return Parse.User.getSessionToken();
+				console.log(`Successfully logged user ${user}`);
+				return user.getSessionToken();
 			},
 			error: function(user, error) {
-				console.log('Login failed');
-				// return false;
+				console.error(`Login failed due to: ${error.code} ${error.message}`);
 			}
 		});
 	}
@@ -41,6 +57,7 @@ class ParseService {
 			console.error('Token could not be validated');
 		});
 	}
+
 
 	// Log user out
 	logOut() {

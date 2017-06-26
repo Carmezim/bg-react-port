@@ -3,6 +3,7 @@
   "author": "Adriano Carmezim Filho <carmezim.filho@gmail.com>",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:1337/parse",
   "dependencies": {
     "azure-storage": "^2.2.0",
     "babel-cli": "^6.24.1",
