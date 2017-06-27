@@ -6,12 +6,13 @@ import PropTypes from 'prop-types';
 
 import signupRequest from './actions';
 
-
 // If unit testing connected components, export the non
 // connected componend and then the connected component as default
 
 
 class Signup extends Component {
+
+	static isPrivate = false;
 
 	static propTypes = {
 		handleSubmit: PropTypes.func,

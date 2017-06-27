@@ -1,6 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { SIGNUP_REQUESTING, SIGNUP_SUCCESS, SIGNUP_ERROR } from './actionTypes';
-import ParseService from '../services/parse';
+import ParseService from '../services/parseAPI';
 
 
 // Waits until  SIGNUP_REQUESTING action is dispatched
