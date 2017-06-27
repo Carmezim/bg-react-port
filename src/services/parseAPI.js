@@ -1,5 +1,10 @@
 import Parse from 'parse';
 
+
+export const PAST_EVENTS_LIMIT = 100;
+export const AUTHORS_LIMIT = 200;
+
+
 class ParseService {
 	constructor(props) {
 		Parse.initialize("bookgig", "bookgig");
@@ -17,6 +22,8 @@ class ParseService {
 	}
 
 
+
+	// ----------------- USER RELATED METHODS -----------------------
 	// create new user
 	createUSer(username, password) {
 		let user = new Parse.User();
@@ -73,6 +80,89 @@ class ParseService {
 		console.log('logging out');
 		Parse.User.logOut()
 	}
+
+
+
+
+
+	// Load data
+	loadData(type, status, options, callback) {
+
+		const Post = Parse.Object.extend('Event');
+		const query = new Parse.Query(Post);
+		const promise = new Parse.Promise();
+		query.include('eventBook');
+
+		if ( options.imports ){
+			query.equalTo('importSource', options.imports);
+			query.skip(((options.page||0) * PAST_EVENTS_LIMIT) || 0);
+			options.limit = PAST_EVENTS_LIMIT;
+		}
+
+		if (!!options.limit){
+			query.limit(options.limit); // rows limit
+		} else {
+			query.limit(1000);  // "soft" limit 100 to overwrite the 100 default
+		}
+
+		if (!!options.sort){
+			query.ascending(options.sort);
+		} else {
+			query.ascending("startDate");
+		}
+
+		if (typeof(type) !== 'undefined' && type && !options.author){
+			query.equalTo("type", type);
+		}
+
+		// Search for author
+		if (options.author){
+			query.containsAll('author_search_array', [options.author]);
+		}
+
+		if (status !== 'draft' && status !== 'import'){
+			if (status !== 'past'){
+				query.equalTo("status", status);
+				query.greaterThanOrEqualTo('endDate', new Date(moment().subtract(12, 'hours')));
+			} else {
+				query.lessThanOrEqualTo('endDate', new Date(moment().subtract(12, 'hours')));
+				query.skip((options.page * PAST_EVENTS_LIMIT) || 0);
+				query.limit(PAST_EVENTS_LIMIT);
+			}
+		} else {
+			query.equalTo("status", status);
+			query.descending("createdAt");
+		}
+
+		query.find().then( (results) => {
+
+			let items = dl.prepareData(results);
+
+			if ( options.waitPromise ){
+				options.waitPromise.then( () => {
+					done();
+				});
+				return;
+			}
+
+			done();
+
+			function done(){
+				callback({'items' : items });
+				promise.resolve({
+					items : items
+				});
+			}
+
+		},function(error) {
+			console.log('error',error);
+			promise.reject(error);
+			return false;
+		});
+	}
+
+
+
 
 }
 
