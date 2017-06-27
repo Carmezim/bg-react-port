@@ -1,7 +1,7 @@
 import { take, fork, cancel, call, put, cancelled } from 'redux-saga/effects';
 import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT } from './actionTypes';
 import history from '../history'
-import ParseService from '../services/parse';
+import ParseService from '../services/parseAPI';
 
 
 import { setClient, unsetClient } from './actions';
@@ -18,28 +18,32 @@ function* logout () {
 }
 
 function* loginFlow (username, password) {
+	let parsePromise;
 	let token;
 	try {
 		// invoke logIn function that communicates with Parse API.
 		// Redux Saga pauses here until we successfully log in or
 		// receive an error
-		token = yield call(ParseService.login, username, password);
-		console.log(token)
-		// inform Redux to set user token, non blocking.
-		yield put(setClient(token));
+		parsePromise = yield call(ParseService.login, username, password);
 
-		// informRedux login was successful
-		yield put({ type: LOGIN_SUCCESS });
+		token = parsePromise.attributes.sessionToken;
 
-		// set stringified version of the token to localstorage
-		localStorage.setItem('token', JSON.stringify(token));
+		if (token) {
+			// inform Redux to set user token, non blocking.
+			yield put(setClient(token));
 
-		// place a redirect here to admin panel when ready
-		history.push("/admin-panel");
+			// informRedux login was successful
+			yield put({ type: LOGIN_SUCCESS });
 
+			// set stringified version of the token to localstorage
+			localStorage.setItem('token', JSON.stringify(token));
+
+			// place a redirect here to admin panel when ready
+			// history.push("/admin-panel");
+		}
 	} catch (error) {
 		// if error, send it to Redux
-		yield put({ type: LOGIN_ERROR});
+		yield put({ type: LOGIN_ERROR, error});
 	} finally {
 		// if the forked task is cancelled we then redirect
 		// to login again
@@ -47,8 +51,6 @@ function* loginFlow (username, password) {
 			history.push("/admin");
 		}
 	}
-
-	return token;
 }
 
 // Watcher

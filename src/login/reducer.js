@@ -18,7 +18,7 @@ const reducer = (state = initialState, action = {}) => {
 				successful: false,
 				messages: [{ body: "Logging in...", time:  new Date() }],
 				errors: [],
-				token: null,
+				...state,
 			};
 
 		case LOGIN_SUCCESS:
@@ -27,7 +27,7 @@ const reducer = (state = initialState, action = {}) => {
 				successful: true,
 				messages: [],
 				errors: [],
-				token: null,
+				...state,
 			};
 
 		case LOGIN_ERROR:
@@ -35,25 +35,24 @@ const reducer = (state = initialState, action = {}) => {
 				requesting: false,
 				successful: false,
 				errors: state.errors.concat([{
-					body: action.error.toString(),
+					body: action.error.message.toString(),
 					time: new Date(),
 				}]),
 				messages: [],
-				token: null,
+				...state,
 			};
 
 		case SET_CURRENT_LOGGED_USER:
 			return {
-				...state,
-				messages: [{ body: "Setting current user...", time:  new Date() }],
+				messages: [{ body: "Setting current user ", time:  new Date() }],
 				token: action.token,
+				...state,
 			};
 
 		case LOGOUT:
 			return {
-				...state,
-				messages: [{ body: "Logging out...", time:  new Date() }],
 				token: null,
+				...state,
 			};
 
 		default:
