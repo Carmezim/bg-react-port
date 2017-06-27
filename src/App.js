@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
+import PrivateRoute from './helpers/PrivateRoute/AuthRoute'
 
 // Import all components
 import Login from './login';
@@ -11,6 +11,9 @@ import './App.css';
 
 
 class App extends Component {
+
+	static isPrivate = false;
+
   render() {
     return (
       <div className="App">
@@ -18,13 +21,15 @@ class App extends Component {
           {/*<h2>BookGig MainPage</h2>*/}
         </div>
         <section className="app-body">
-          <Switch>
-						{/*<Route path="/admin" component={Login} />*/}
-						<Route path="/admin" component={Login} />
-						<Route path="/admin-panel" component={Admin} />
-						<Route path="/" component={Signup} />
-					</Switch>
-        </section>
+					<BrowserRouter>
+						<div>
+							{/*<Route path="/admin" component={Login} />*/}
+							<PrivateRoute path="/admin" component={Login} />
+							<PrivateRoute path="/admin-panel" component={Admin} />
+							<PrivateRoute exact path="/" component={Signup} />
+						</div>
+					</BrowserRouter>
+				</section>
       </div>
     );
   }
