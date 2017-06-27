@@ -2,7 +2,7 @@ import Parse from 'parse';
 
 class ParseService {
 	constructor(props) {
-		Parse.initialize("bookgig");
+		Parse.initialize("bookgig", "bookgig");
 		Parse.serverURL = 'http://localhost:1337/parse';
 	}
 
@@ -36,16 +36,25 @@ class ParseService {
 
 	// Log user in returning session token on a successful call.
 	login(username, password) {
-
-		Parse.User.logIn(username, password, {
+		 return Parse.User.logIn(username, password, {
 			success: function(user) {
-				console.log(`Successfully logged user ${user}`);
-				return user.getSessionToken();
+				console.log(`Successfully logged user ${username}`);
 			},
 			error: function(user, error) {
-				console.error(`Login failed due to: ${error.code} ${error.message}`);
+				console.error(`Parse failed to login due to: ${error.code} ${error.message}`);
+				// return false;
 			}
 		});
+	}
+
+	isUserAuthenticated() {
+		let currentUser = Parse.User.current();
+		if (currentUser) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 
@@ -61,6 +70,7 @@ class ParseService {
 
 	// Log user out
 	logOut() {
+		console.log('logging out');
 		Parse.User.logOut()
 	}
 
