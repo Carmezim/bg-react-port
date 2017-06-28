@@ -1,11 +1,11 @@
 import { take, fork, cancel, call, put, cancelled } from 'redux-saga/effects';
-import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT } from './actionTypes';
+import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './actionTypes';
 import history from '../history'
 import ParseService from '../services/parseAPI';
 
 
-import { setClient, unsetClient } from './actions';
-
+import { setClient, unsetClient } from '../client/actions';
+import { LOGOUT } from '../client/actionTypes';
 
 function* logout () {
 	yield put(unsetClient());
@@ -48,7 +48,7 @@ function* loginFlow (username, password) {
 		// if the forked task is cancelled we then redirect
 		// to login again
 		if (yield cancelled()) {
-			history.push("/admin");
+			yield call(history.push, "/admin");
 		}
 	}
 }
@@ -85,6 +85,9 @@ function* loginWatcher () {
 		// watch for a LOGOUT or LOGIN_ERROR
 		const task = yield fork(loginFlow, username, password);
 
+		// At this point it is watching only for a LOGOUT or LOGIN_ERROR
+		// The moment the user logs out or a login error occurs
+		// the loop will move forward
 		const action = yield take([LOGOUT, LOGIN_ERROR]);
 
 		// If users try to logout before the task that was trying

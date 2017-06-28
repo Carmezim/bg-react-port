@@ -9,7 +9,7 @@ import Errors from '../helpers/notifications/Errors';
 
 
 // import action
-import { loginRequest } from './actions';
+import loginRequest from './actions';
 
 
 class Login extends Component {
