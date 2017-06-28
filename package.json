@@ -10,6 +10,7 @@
     "babel-preset-es2015": "^6.24.1",
     "express": "^4.15.3",
     "history": "^4.6.3",
+    "moment": "^2.18.1",
     "parse": "^1.9.2",
     "parse-dashboard": "^1.0.28",
     "parse-react": "^0.5.2",
@@ -27,6 +28,10 @@
     "request": "^2.81.0"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint-config-fbjs": "^1.1.1",
+    "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-react": "^7.1.0",
     "immutable": "^3.8.1",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.2",
