@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter , Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import PrivateRoute from './helpers/PrivateRoute/AuthRoute'
 
@@ -22,12 +22,12 @@ class App extends Component {
         </div>
         <section className="app-body">
 					<BrowserRouter>
-						<div>
+						<Switch>
 							{/*<Route path="/admin" component={Login} />*/}
 							<PrivateRoute path="/admin" component={Login} />
 							<PrivateRoute path="/admin-panel" component={Admin} />
-							<PrivateRoute exact path="/" component={Signup} />
-						</div>
+							<PrivateRoute path="/" component={Signup} />
+						</Switch>
 					</BrowserRouter>
 				</section>
       </div>
