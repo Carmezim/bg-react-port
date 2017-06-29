@@ -29,11 +29,13 @@ export const renderNameInput = ({ input, type, meta: { touched, error } }) => (
 );
 
 
-const EventTemplate = () => {
+const EventTemplate = (props) => {
+
+	const {submit, invalid} = props;
 
 	return (
 		<div>
-			<form onSubmit={this.props.submit}>
+			<form onSubmit={submit}>
 				<h1>Admin Panel</h1>
 				<h3 className="create-event">Add Event</h3>
 				<label htmlFor="Title">Title</label>
@@ -136,7 +138,7 @@ const EventTemplate = () => {
 					alidate={nameRequired}
 				/>
 				<button
-					disabled={this.props.invalid}
+					disabled={invalid}
 					action="submit"
 				>Submit</button>
 			</form>
