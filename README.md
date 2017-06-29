@@ -21,7 +21,7 @@
 
 6.Run `yarn mongo` then in another terminal instance `mongorestore --archive=/path/to/dump/dumpfile --db bookgig`
 
-7.`yarn start` and start developing! (while server-side is not implemented run `start-react`)
+7.`yarn start` and start developing! (remember to login on Parse Dashboard on localhost:1337/dashboard)
 
 8.To build simply run `yarn build`
 
