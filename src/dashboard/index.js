@@ -22,7 +22,7 @@ class Dashboard extends Component {
 		handleSubmit: PropTypes.func.isRequired,
 		invalid: PropTypes.bool.isRequired,
 		client: PropTypes.shape({
-			token: PropTypes.object.isRequired,
+			token: PropTypes.object, // add required
 		}),
 		bookEvents: PropTypes.shape({
 			list: PropTypes.array,
@@ -33,7 +33,7 @@ class Dashboard extends Component {
 		}).isRequired,
 			createEvent: PropTypes.func.isRequired,
 			reset: PropTypes.func.isRequired,
-		};
+	};
 
 	constructor(props) {
 		super(props);
@@ -72,8 +72,11 @@ class Dashboard extends Component {
 			},
 		} = this.props;
 
+		console.log(this.bookEvents);
+
 		return (
 			<div className="admin-dashboard">
+				<h1>Dashboard</h1>
 				<div className="create-event-form">
 					<EventTemplate submit={handleSubmit(this.submit)} invalid={invalid} />
 					<hr />
@@ -82,7 +85,6 @@ class Dashboard extends Component {
 		);
 	}
 }
-
 
 
 // Getting only the piece of state we need for this component from the global state
