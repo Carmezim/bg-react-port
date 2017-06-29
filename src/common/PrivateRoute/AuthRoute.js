@@ -5,12 +5,12 @@ import ParseService from '../../services/parseAPI';
 
 
 
-//Mock of an Auth method, can be replaced with an async call to the backend. Must return true or false
+// Auth method, can be replaced with an async call to the backend. Must return true or false
 const isAuthenticated = ParseService.isUserAuthenticated();
 console.log('is auth?', isAuthenticated);
 
-const PRIVATE_ROOT = '/admin-panel';
-const PUBLIC_ROOT = '/';
+const PRIVATE_ROOT = '/dashboard';
+const PUBLIC_ROOT = '/Dashboard';
 
 const AuthRoute = ({component, ...props}) => {
 	const { isPrivate } = component;
@@ -29,7 +29,7 @@ const AuthRoute = ({component, ...props}) => {
 		//User is not Authenticated
 		if (isPrivate === true) {
 			//If the route is private the user is redirected to the app's public root.
-			return <Redirect to={ '/admin' } />;
+			return <Redirect to={ PUBLIC_ROOT } />;
 		}
 		else {
 			//If the route is public, the user may proceed.
