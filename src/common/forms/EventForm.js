@@ -36,15 +36,13 @@ const EventTemplate = (props) => {
 	return (
 		<div>
 			<form onSubmit={submit}>
-				<h1>Admin Panel</h1>
-				<h3 className="create-event">Add Event</h3>
 				<label htmlFor="Title">Title</label>
 				<Field
 					name="title"
 					type="text"
 					id="name"
 					className="event-title"
-					component={this.renderNameInput}
+					component={renderNameInput}
 					validate={nameRequired}
 				/>
 				<label htmlFor="author-name">Author Name</label>
@@ -81,7 +79,7 @@ const EventTemplate = (props) => {
 					id="postcode"
 					className="postcode"
 					component="input"
-					alidate={nameRequired}
+					validate={nameRequired}
 				/>
 				<label htmlFor="address">Address</label>
 				<Field
@@ -90,7 +88,7 @@ const EventTemplate = (props) => {
 					id="address"
 					className="address"
 					component="input"
-					alidate={nameRequired}
+					validate={nameRequired}
 				/>
 				<label htmlFor="price">Price</label>
 				<Field
@@ -99,7 +97,7 @@ const EventTemplate = (props) => {
 					id="price"
 					className="price"
 					component="input"
-					alidate={nameRequired}
+					validate={nameRequired}
 				/>
 				<label htmlFor="event-url">Event URL</label>
 				<Field
@@ -108,7 +106,7 @@ const EventTemplate = (props) => {
 					id="event-url"
 					className="event-url"
 					component="input"
-					alidate={nameRequired}
+					validate={nameRequired}
 				/>
 				<label htmlFor="description">Description</label>
 				<Field
@@ -117,7 +115,7 @@ const EventTemplate = (props) => {
 					id="description"
 					className="description"
 					component="input"
-					alidate={nameRequired}
+					validate={nameRequired}
 				/>
 				<label htmlFor="more-about-event">More About This Event</label>
 				<Field
@@ -126,7 +124,7 @@ const EventTemplate = (props) => {
 					id="more-about-event"
 					className="more-about-event"
 					component="input"
-					alidate={nameRequired}
+					validate={nameRequired}
 				/>
 				<label htmlFor="banner-title">Banner Title</label>
 				<Field
@@ -135,7 +133,7 @@ const EventTemplate = (props) => {
 					id="banner-title"
 					className="banner-title"
 					component="input"
-					alidate={nameRequired}
+					validate={nameRequired}
 				/>
 				<button
 					disabled={invalid}
