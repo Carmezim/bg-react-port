@@ -1,4 +1,4 @@
-import { take, fork, cancel, call, put, cancelled } from 'redux-saga/effects';
+import { take, fork, call, put, cancelled } from 'redux-saga/effects';
 import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './actionTypes';
 import ParseService from '../services/parseAPI';
 import history from '../history';
@@ -9,14 +9,14 @@ import { setClient, unsetClient } from '../client/actions';
 import { LOGOUT } from '../client/actionTypes';
 
 
+// handle logout by calling Parse API
 function* logout () {
-	yield put(unsetClient());
 
-	localStorage.removeItem('token');
-
+	// call parse Api and wait until it finishes
 	yield ParseService.logOut();
 
-	// history.push('/admin');
+	// redirect to login page
+	history.push('/admin');
 }
 
 function* loginFlow (username, password) {
@@ -34,14 +34,11 @@ function* loginFlow (username, password) {
 			// inform Redux to set user token, non blocking.
 			yield put(setClient(token));
 
-			// informRedux login was successful
+			// informR edux login was successful
 			yield put({ type: LOGIN_SUCCESS });
 
-			// set stringified version of the token to localstorage
-			localStorage.setItem('token', JSON.stringify(token));
-
 			// place a redirect here to dashboard panel when ready
-			// history.push("/dashboard");
+			history.push("/dashboard");
 		}
 	} catch (error) {
 		// if error, send it to Redux
@@ -49,8 +46,11 @@ function* loginFlow (username, password) {
 	} finally {
 		// if the forked task is cancelled we then redirect
 		// to login again
+		// NOTE: for now it won't be useful because I stopped
+		// using 'cancel(task)` as explained below so there won't
+		// be a forked task to cancel
 		if (yield cancelled()) {
-			yield call(history.push, "/dashboard");
+			history.push("/admin");
 		}
 	}
 }
@@ -85,19 +85,22 @@ function* loginWatcher () {
 		// executes it. The loop then continues and starts looking for the next actions on'take()' which
 		// are LOGOUT or LOGIN_ERROR. The user logs in once so we only need to
 		// watch for a LOGOUT or LOGIN_ERROR
-		const task = yield fork(loginFlow, username, password);
+		yield fork(loginFlow, username, password);
 
 		// At this point it is watching only for a LOGOUT or LOGIN_ERROR
 		// The moment the user logs out or a login error occurs
 		// the loop will move forward
 		const action = yield take([LOGOUT, LOGIN_ERROR]);
-
 		// If users try to logout before the task that was trying
 		// to log then in completes we can cancel it and continue
-		if (action.type === LOGOUT) yield cancel(task);
+		// if (action.type === LOGOUT) yield cancel(task); I need to figure a better way to
+		// integrate both scenarios
 
-		// Log user out
-		yield call(logout);
+		// If a LOGOUT action is dispatched the we call 'logout' to
+		// log out the user
+		if (action.type === LOGOUT) {
+			yield call(logout);
+		}
 	}
 }
 

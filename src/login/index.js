@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { Redirect } from 'react-router-dom';
 
 
 // helpers
@@ -89,7 +88,7 @@ class Login extends Component {
 					{!requesting && !successful && (
 						<div>Don't have an account yet? You need to create one to login.</div>
 					)}
-					{successful && <Redirect to="/dashboard" />}
+					{/*{successful && <Redirect to="/dashboard" />}*/}
 				</div>
 			</div>
 		);
