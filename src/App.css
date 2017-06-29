@@ -2,3 +2,7 @@
 .App{
   text-align: center;
 }
+
+button[disabled] {
+  opacity: 0.6;
+}

@@ -12,8 +12,6 @@ import signupRequest from './actions';
 
 class Signup extends Component {
 
-	static isPrivate = false;
-
 	static propTypes = {
 		handleSubmit: PropTypes.func,
 		signupRequest: PropTypes.func,
@@ -69,9 +67,7 @@ class Signup extends Component {
 					console.log(`Submission falied due to ${errors}`)
 				)}
 				{!requesting && !!messages.length && (
-					messages.map(message => {
-						console.log(`${message.body} at ${message.time}`)
-					})
+					messages.map(message => console.log(`${message.body} at ${message.time}`))
 				)}
 				{!requesting && successful && (
 					<div>Your email was successfully submitted to our newsletter</div>

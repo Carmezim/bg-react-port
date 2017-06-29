@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import { BrowserRouter , Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import PrivateRoute from './helpers/PrivateRoute/AuthRoute'
-
+import PrivateRoute from './common/PrivateRoute/AuthRoute'
+import { Route } from 'react-router-dom';
 // Import all components
 import Login from './login';
-import Admin from './admin';
+import Dashboard from './Dashboard';
 import Signup from './signup';
 import './App.css';
 
 
 class App extends Component {
 
-	static isPrivate = false;
 
   render() {
     return (
@@ -21,14 +20,12 @@ class App extends Component {
           {/*<h2>BookGig MainPage</h2>*/}
         </div>
         <section className="app-body">
-					<BrowserRouter>
-						<Switch>
-							{/*<Route path="/admin" component={Login} />*/}
-							<PrivateRoute path="/admin" component={Login} />
-							<PrivateRoute path="/admin-panel" component={Admin} />
-							<PrivateRoute path="/" component={Signup} />
-						</Switch>
-					</BrowserRouter>
+					<Switch>
+						{/*<Route path="/admin" component={Login} />*/}
+						<PrivateRoute path="/admin" component={Login} />
+						<PrivateRoute path="/dashboard" component={Dashboard} />
+						<Route path="/" component={Signup} />
+					</Switch>
 				</section>
       </div>
     );
