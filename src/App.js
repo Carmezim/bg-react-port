@@ -1,19 +1,40 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import PrivateRoute from './common/PrivateRoute/AuthRoute'
-import { Route } from 'react-router-dom';
+import { Route , Redirect } from 'react-router-dom';
+import ParseService from './services/parseAPI';
+
+
+
+
+
 // Import all components
 import Login from './login';
-import Dashboard from './Dashboard';
+import Dashboard from './dashboard';
 import Signup from './signup';
 import './App.css';
 
 
 class App extends Component {
 
+	// static propTypes = {
+	// 	children: PropTypes.node,
+	// 	client: PropTypes.shape({
+	// 		token: PropTypes.object,
+	// 	}),
+	// };
 
-  render() {
+	clickHandler = () => {
+		ParseService.logOut()
+	};
+
+
+	render() {
+
+		// const { client, submit } = this.props;
+
     return (
       <div className="App">
         <div className="app-header">
@@ -24,16 +45,20 @@ class App extends Component {
 						{/*<Route path="/admin" component={Login} />*/}
 						<PrivateRoute path="/admin" component={Login} />
 						<PrivateRoute path="/dashboard" component={Dashboard} />
-						<Route path="/" component={Signup} />
+						<Route exact path="/" component={Signup} />
 					</Switch>
 				</section>
-      </div>
+			<div className="logout-button">
+			<button onClick={() => this.clickHandler()}>
+					Logout
+			</button>
+			</div>
+		</div>
     );
   }
 }
 
-App.propTypes = {
-  children: PropTypes.node,
-};
 
-export default App;
+
+
+export default (App);
