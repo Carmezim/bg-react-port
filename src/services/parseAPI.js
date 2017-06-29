@@ -1,4 +1,5 @@
 import Parse from 'parse';
+import moment from 'moment';
 
 
 export const PAST_EVENTS_LIMIT = 100;
@@ -11,21 +12,20 @@ class ParseService {
 		Parse.serverURL = 'http://localhost:1337/parse';
 	}
 
-
 	// this function is called on 'sagas.js' and returns the response
 	// that will be inserted into the corresponding dispatched action e.g.
 	// the returned value is dispatched in the SIGNUP_SUCCESS action
-	signupEmail(emailResponse) {
+	signupEmail (emailResponse) {
 		// TODO: check how emails for newsletter will be handled by Parse
 		alert(`Mocking email ${emailResponse.email} submission for newsletter`);
 		return emailResponse;
-	}
+	};
 
 
 
 	// ----------------- USER RELATED METHODS -----------------------
 	// create new user
-	createUSer(username, password) {
+	createUSer (username, password) {
 		let user = new Parse.User();
 		user.set("username", username);
 		user.set("password", password);
@@ -38,11 +38,11 @@ class ParseService {
 				alert(`Error: ${error.code} ${error.message}`)
 			}
 		});
-	}
+	};
 
 
 	// Log user in returning session token on a successful call.
-	login(username, password) {
+	login (username, password) {
 		 return Parse.User.logIn(username, password, {
 			success: function(user) {
 				console.log(`Successfully logged user ${username}`);
@@ -52,9 +52,9 @@ class ParseService {
 				// return false;
 			}
 		});
-	}
+	};
 
-	isUserAuthenticated() {
+	isUserAuthenticated () {
 		let currentUser = Parse.User.current();
 		if (currentUser) {
 			return true;
@@ -62,31 +62,40 @@ class ParseService {
 		else {
 			return false;
 		}
-	}
+	};
 
 
 	// set current user through session token
-	setCurrentUser(token) {
-		Parse.User.become(token.toString()).then( (user) => {
+	setCurrentUser (token) {
+		return Parse.User.become(token.toString()).then( (user) => {
 			console.log('Token was validated and current user is now set.');
 		}, (error) => {
 			console.error('Token could not be validated');
 		});
-	}
+	};
 
 
 	// Log user out
 	logOut() {
-		console.log('logging out');
-		Parse.User.logOut()
-	}
-
-
-
+		if (Parse.User.current()) {
+			console.log(`Current user is ${Parse.User.current().attributes.username}`);
+		}
+		else {
+			console.log(`Current user is ${Parse.User.current()}`);
+		}
+		Parse.User.logOut().then(
+			(success) => {
+				console.log(`User logged out! Current user is ${Parse.User.current()}`);
+		},
+			(error) => {
+				console.error(`Loggout failed due: ${error}`)
+			}
+		)
+	};
 
 
 	// Load data
-	loadData(type, status, options, callback) {
+	loadData (type, status, options, callback) {
 
 		const Post = Parse.Object.extend('Event');
 		const query = new Parse.Query(Post);
@@ -136,7 +145,7 @@ class ParseService {
 
 		query.find().then( (results) => {
 
-			let items = dl.prepareData(results);
+			let items = this.prepareData(results);
 
 			if ( options.waitPromise ){
 				options.waitPromise.then( () => {
@@ -159,9 +168,11 @@ class ParseService {
 			promise.reject(error);
 			return false;
 		});
+	};
+
+	prepareData(results) {
+
 	}
-
-
 
 
 }
