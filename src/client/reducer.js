@@ -12,9 +12,8 @@ const reducer = (state = initialState, action) => {
 	switch(action.type) {
 		case SET_CURRENT_USER:
 			return {
-				// messages: [{ body: "Setting current user ", time:  new Date() }],
+				token: action.token,
 			};
-
 
 		case LOGOUT:
 			return {
