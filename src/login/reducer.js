@@ -38,7 +38,6 @@ const reducer = (state = initialState, action = {}) => {
 				messages: [],
 			};
 
-
 		default:
 			return state;
 	}

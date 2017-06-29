@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
+import { Redirect } from 'react-router-dom';
 
 
 // helpers
-import Errors from '../helpers/notifications/Errors';
+import Errors from '../common/notifications/Errors';
 
 
 // import action
@@ -86,11 +87,9 @@ class Login extends Component {
 					)}
 					{requesting && <div>Logging in...</div>}
 					{!requesting && !successful && (
-					<div>Don't have an account yet? Create one to login.</div>
-					// not sure yet how this will be handled so just leaving this message
-					// AFAIK dashboard is used to create admin users(?)
-					// an option would be to link the user to a signup ?
+						<div>Don't have an account yet? You need to create one to login.</div>
 					)}
+					{successful && <Redirect to="/dashboard" />}
 				</div>
 			</div>
 		);

@@ -1,11 +1,13 @@
 import { take, fork, cancel, call, put, cancelled } from 'redux-saga/effects';
 import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './actionTypes';
-import history from '../history'
 import ParseService from '../services/parseAPI';
+import history from '../history';
 
 
+// User auth state
 import { setClient, unsetClient } from '../client/actions';
 import { LOGOUT } from '../client/actionTypes';
+
 
 function* logout () {
 	yield put(unsetClient());
@@ -14,7 +16,7 @@ function* logout () {
 
 	yield ParseService.logOut();
 
-	history.push('/admin');
+	// history.push('/admin');
 }
 
 function* loginFlow (username, password) {
@@ -38,8 +40,8 @@ function* loginFlow (username, password) {
 			// set stringified version of the token to localstorage
 			localStorage.setItem('token', JSON.stringify(token));
 
-			// place a redirect here to admin panel when ready
-			// history.push("/admin-panel");
+			// place a redirect here to dashboard panel when ready
+			// history.push("/dashboard");
 		}
 	} catch (error) {
 		// if error, send it to Redux
@@ -48,7 +50,7 @@ function* loginFlow (username, password) {
 		// if the forked task is cancelled we then redirect
 		// to login again
 		if (yield cancelled()) {
-			yield call(history.push, "/admin");
+			yield call(history.push, "/dashboard");
 		}
 	}
 }
