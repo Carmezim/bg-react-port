@@ -1,5 +1,5 @@
 import Immutable from 'seamless-immutable';
-import { SET_CURRENT_LOGGED_USER, LOGOUT } from './actionTypes';
+import { SET_CURRENT_USER, LOGOUT } from './actionTypes';
 
 
 const initialState = Immutable({
@@ -10,10 +10,9 @@ const initialState = Immutable({
 const reducer = (state = initialState, action) => {
 
 	switch(action.type) {
-		case SET_CURRENT_LOGGED_USER:
+		case SET_CURRENT_USER:
 			return {
 				// messages: [{ body: "Setting current user ", time:  new Date() }],
-				token: action.token,
 			};
 
 
