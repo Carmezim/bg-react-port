@@ -81,15 +81,6 @@ const EventTemplate = (props) => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label htmlFor="address">Address</label>
-				<Field
-					name="address"
-					type="text"
-					id="address"
-					className="address"
-					component="input"
-					validate={nameRequired}
-				/>
 				<label htmlFor="price">Price</label>
 				<Field
 					name="price"
