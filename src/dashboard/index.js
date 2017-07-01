@@ -8,77 +8,71 @@ import ParseService from '../services/parseAPI';
 
 // Import actions
 import { createEvent } from './actions';
-import { unsetClient } from '../client/actions';
 
 
+// Import components
 import EventTemplate from '../common/forms/EventForm';
+
 
 class Dashboard extends Component {
 
 	// flag for Route authentication
 	static isPrivate = true;
 
-	static propTypes = {
-		handleSubmit: PropTypes.func.isRequired,
-		invalid: PropTypes.bool.isRequired,
-		client: PropTypes.shape({
-			token: PropTypes.object, // add required
-		}),
-		bookEvents: PropTypes.shape({
-			list: PropTypes.array,
-			requesting: PropTypes.bool,
-			successful: PropTypes.bool,
-			messages: PropTypes.array,
-			errors: PropTypes.array,
-		}).isRequired,
-			createEvent: PropTypes.func.isRequired,
-			reset: PropTypes.func.isRequired,
-	};
+	// // prop validation
+	// static propTypes = {
+	// 	handleSubmit: PropTypes.func.isRequired,
+	// 	invalid: PropTypes.bool.isRequired,
+	// 	client: PropTypes.shape({
+	// 		token: PropTypes.object.isRequired, // add required
+	// 	}),
+	// 	dashboard: PropTypes.shape({
+	// 		list: PropTypes.array,
+	// 		requesting: PropTypes.bool,
+	// 		successful: PropTypes.bool,
+	// 		messages: PropTypes.array,
+	// 		errors: PropTypes.array,
+	// 	}).isRequired,
+	// 		createEvent: PropTypes.func.isRequired,
+	// 		reset: PropTypes.func.isRequired,
+	// };
 
-	constructor(props) {
-		super(props);
-	}
-
-
-	submit = (eventToCreate) => {
-		const { client, createEvent, reset } = this.props;
-
-		createEvent(client, eventToCreate);
-
-		reset();
-	};
-
-
-	logout = () => {
-		console.log('test');
-
-		this.props.unsetClient();
-
-		ParseService.logOut();
-	};
+	//
+	// submit = (eventToCreate) => {
+	// 	const { client, createEvent, reset } = this.props;
+	//
+	// 	createEvent(client, eventToCreate);
+	//
+	// 	reset();
+	// };
 
 
 	render() {
+		//
+		// const {
+		// 	handleSubmit,
+		// 	invalid,
+		// 	client,
+		// 	dashboard: {
+		// 		list,
+		// 		requesting,
+		// 		successful,
+		// 		messages,
+		// 		errors,
+		// 	},
+		// } = this.props;
 
-		const {
-			handleSubmit,
-			invalid,
-			bookEvents: {
-				list,
-				requesting,
-				successful,
-				messages,
-				errors,
-			},
-		} = this.props;
-
-		console.log(this.bookEvents);
 
 		return (
 			<div className="admin-dashboard">
+				{
+					<button onClick={ParseService.logOut}>
+						LOGOUT parse
+					</button>
+				}
 				<h1>Dashboard</h1>
 				<div className="create-event-form">
-					<EventTemplate submit={handleSubmit(this.submit)} invalid={invalid} />
+					{/*<EventTemplate submit={handleSubmit(this.submit)} invalid={invalid} />*/}
 					<hr />
 				</div>
 			</div>
@@ -90,16 +84,16 @@ class Dashboard extends Component {
 // Getting only the piece of state we need for this component from the global state
 const mapStateToProps = state => ({
 	client: state.client,
-	bookEvents: state.bookEvents,
+	dashboard: state.dashboard,
 });
 
-// Making the login state piece we've got and 'loginRequest' action
-// available in this.props within this component (Login)
-const connected = connect(mapStateToProps, { createEvent, unsetClient })(Dashboard);
+// Making the login state piece we've got and our actions
+// available in this.props within this component (Dashboard)
+const connected = connect(mapStateToProps, { createEvent })(Dashboard);
 
 // In our state this form will be available in 'form.login'
 const formed = reduxForm({
-	form: 'bookEvents',
+	form: 'dashboard',
 })(connected);
 
 

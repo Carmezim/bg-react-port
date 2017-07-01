@@ -12,11 +12,9 @@ import Errors from '../common/notifications/Errors';
 import loginRequest from './actions';
 
 
-class Login extends Component {
+class Login extends Component {eh
 
-	static isPrivate = false;
-
-		// validation
+	// prop validation
 	static propTypes = {
 		handleSubmit: PropTypes.func,
 		loginRequest: PropTypes.func,
@@ -77,7 +75,7 @@ class Login extends Component {
 					</fieldset>
 				</form>
 				<div className="login-handling">
-				{/* Some loggin handling */}
+					{/* Some loggin handling */}
 					{!requesting && !!errors.length && (
 						<Errors message="Failure to login due to:" errors={errors} />
 					)}
@@ -94,13 +92,10 @@ class Login extends Component {
 		);
 	}
 }
-
-
 // Getting only the piece of state we need for this component from the global state
 const mapStateToProps = state => ({
 	login: state.login,
 });
-
 // Making the login state piece we've got and 'loginRequest' action
 // available in this.props within this component (Login)
 const connected = connect(mapStateToProps, { loginRequest })(Login);

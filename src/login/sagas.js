@@ -1,22 +1,23 @@
-import { take, fork, call, put, cancelled } from 'redux-saga/effects';
+import { take, fork, call, put, cancel, cancelled } from 'redux-saga/effects';
 import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './actionTypes';
 import ParseService from '../services/parseAPI';
 import history from '../history';
 
 
 // User auth state
-import { setClient, unsetClient } from '../client/actions';
+import { setClient } from '../client/actions';
 import { LOGOUT } from '../client/actionTypes';
 
 
 // handle logout by calling Parse API
 function* logout () {
-
 	// call parse Api and wait until it finishes
 	yield ParseService.logOut();
 
+	localStorage.removeItem('token');
+
 	// redirect to login page
-	history.push('/admin');
+	yield call(history.push,"/admin");
 }
 
 function* loginFlow (username, password) {
@@ -34,11 +35,13 @@ function* loginFlow (username, password) {
 			// inform Redux to set user token, non blocking.
 			yield put(setClient(token));
 
+			localStorage.setItem('token', JSON.stringify(token))
+
 			// informR edux login was successful
 			yield put({ type: LOGIN_SUCCESS });
 
 			// place a redirect here to dashboard panel when ready
-			history.push("/dashboard");
+			yield history.push("/dashboard");
 		}
 	} catch (error) {
 		// if error, send it to Redux
@@ -57,7 +60,6 @@ function* loginFlow (username, password) {
 
 // Watcher
 function* loginWatcher () {
-
 	// Generators halt execution until their next step is ready
 	// so this look isn't firing in the background instead it
 	// compares the boolean and starts the first step
@@ -85,22 +87,20 @@ function* loginWatcher () {
 		// executes it. The loop then continues and starts looking for the next actions on'take()' which
 		// are LOGOUT or LOGIN_ERROR. The user logs in once so we only need to
 		// watch for a LOGOUT or LOGIN_ERROR
-		yield fork(loginFlow, username, password);
+		const task = yield fork(loginFlow, username, password);
 
 		// At this point it is watching only for a LOGOUT or LOGIN_ERROR
 		// The moment the user logs out or a login error occurs
 		// the loop will move forward
 		const action = yield take([LOGOUT, LOGIN_ERROR]);
+
 		// If users try to logout before the task that was trying
 		// to log then in completes we can cancel it and continue
 		// if (action.type === LOGOUT) yield cancel(task); I need to figure a better way to
 		// integrate both scenarios
+		// if (action.type === LOGIN_ERROR) yield cancel(task);
 
-		// If a LOGOUT action is dispatched the we call 'logout' to
-		// log out the user
-		if (action.type === LOGOUT) {
-			yield call(logout);
-		}
+		yield call(logout);
 	}
 }
 

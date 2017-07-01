@@ -11,11 +11,13 @@ const reducer = (state = initialState, action) => {
 
 	switch(action.type) {
 		case SET_CURRENT_USER:
+			console.log('set user reducer')
 			return {
 				token: action.token,
 			};
 
 		case LOGOUT:
+			console.log('logout reducer')
 			return {
 				token: null,
 			};

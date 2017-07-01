@@ -8,6 +8,7 @@ import ParseService from './services/parseAPI';
 
 
 // Import all components
+import LogoutButton from './common/buttons/Logout';
 import Login from './login';
 import Dashboard from './dashboard';
 import Signup from './signup';
@@ -15,45 +16,32 @@ import './App.css';
 
 
 // import actions
-import { unsetClient } from './client/actions'
+import { setClient, unsetClient } from './client/actions'
 
 
 class App extends Component {
 
 	static propTypes = {
 		children: PropTypes.node,
-		logout: PropTypes.func,
-		client: PropTypes.shape({
-			token: PropTypes.object,
-		}),
 	};
 
 
 	render() {
 
-		const { client: token } = this.props;
+	const { client: { token } , unsetClient } = this.props;
 
 		return (
 			<div className="App">
 				<div className="app-header">
-					{/*<h2>BookGig MainPage</h2>*/}
+				<LogoutButton buttonClass="logout-button" token={token} onClick={unsetClient} />
 				</div>
 				<section className="app-body">
 					<Switch>
-						{/*<Route path="/admin" component={Login} />*/}
-						<PrivateRoute path="/admin" component={Login} />
-						<PrivateRoute path="/dashboard" component={Dashboard} />
-						<Route path="/" component={Signup} />
+						<PrivateRoute token={token} isPrivate={false} path="/admin" component={Login} />
+						<PrivateRoute token={token} isPrivate={true} path="/dashboard" component={Dashboard} />
+						<PrivateRoute exact isPrivate={false} path="/" component={Signup} />
 					</Switch>
 				</section>
-				<div className="logout-button">
-					{!!token.token && (
-						<button onClick={this.props.unsetClient}>
-							{/*<button onClick={ParseService.logOut}>*/}
-						Logout
-						</button>
-					)}{console.log(token)}
-				</div>
 			</div>
 		);
 	}

@@ -1,18 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router-dom';
-import ParseService from '../../services/parseAPI';
 
-
-// Auth method, can be replaced with an async call to the backend. Must return true or false
-const isAuthenticated = ParseService.isUserAuthenticated();
-console.log('is auth?', isAuthenticated);
 
 const PRIVATE_ROOT = '/dashboard';
 const PUBLIC_ROOT = '/admin';
 
 const AuthRoute = ({component, ...props}) => {
-	const { isPrivate } = component;
+
+	const {isPrivate, token } = props;
+	const isAuthenticated = token ? true : false;	
+	
 	if (isAuthenticated) {
 		//User is Authenticated
 		if (isPrivate === true) {
