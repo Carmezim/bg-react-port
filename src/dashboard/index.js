@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 // import ReactCrop from 'react-image-crop';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import ParseService from '../services/parseAPI';
 
 
 // Import actions
@@ -16,63 +15,55 @@ import EventTemplate from '../common/forms/EventForm';
 
 class Dashboard extends Component {
 
-	// flag for Route authentication
-	static isPrivate = true;
+	// prop validation
+	static propTypes = {
+		handleSubmit: PropTypes.func.isRequired,
+		invalid: PropTypes.bool.isRequired,
+		client: PropTypes.shape({
+			token: PropTypes.string.isRequired, // add required
+		}),
+		dashboard: PropTypes.shape({
+			list: PropTypes.array,
+			requesting: PropTypes.bool,
+			successful: PropTypes.bool,
+			messages: PropTypes.array,
+			errors: PropTypes.array,
+		}).isRequired,
+			createEvent: PropTypes.func.isRequired,
+			reset: PropTypes.func.isRequired,
+	};
 
-	// // prop validation
-	// static propTypes = {
-	// 	handleSubmit: PropTypes.func.isRequired,
-	// 	invalid: PropTypes.bool.isRequired,
-	// 	client: PropTypes.shape({
-	// 		token: PropTypes.object.isRequired, // add required
-	// 	}),
-	// 	dashboard: PropTypes.shape({
-	// 		list: PropTypes.array,
-	// 		requesting: PropTypes.bool,
-	// 		successful: PropTypes.bool,
-	// 		messages: PropTypes.array,
-	// 		errors: PropTypes.array,
-	// 	}).isRequired,
-	// 		createEvent: PropTypes.func.isRequired,
-	// 		reset: PropTypes.func.isRequired,
-	// };
-
-	//
-	// submit = (eventToCreate) => {
-	// 	const { client, createEvent, reset } = this.props;
-	//
-	// 	createEvent(client, eventToCreate);
-	//
-	// 	reset();
-	// };
+	
+	submit = (eventToCreate) => {
+		const { client, createEvent, reset } = this.props;
+	
+		createEvent(client, eventToCreate);
+	
+		reset();
+	};
 
 
 	render() {
-		//
-		// const {
-		// 	handleSubmit,
-		// 	invalid,
-		// 	client,
-		// 	dashboard: {
-		// 		list,
-		// 		requesting,
-		// 		successful,
-		// 		messages,
-		// 		errors,
-		// 	},
-		// } = this.props;
+		
+		const {
+			handleSubmit,
+			invalid,
+			client,
+			dashboard: {
+				list,
+				requesting,
+				successful,
+				messages,
+				errors,
+			},
+		} = this.props;
 
 
 		return (
 			<div className="admin-dashboard">
-				{
-					<button onClick={ParseService.logOut}>
-						LOGOUT parse
-					</button>
-				}
 				<h1>Dashboard</h1>
 				<div className="create-event-form">
-					{/*<EventTemplate submit={handleSubmit(this.submit)} invalid={invalid} />*/}
+					<EventTemplate submit={handleSubmit(this.submit)} invalid={invalid} />
 					<hr />
 				</div>
 			</div>

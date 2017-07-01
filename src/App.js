@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import PrivateRoute from './common/PrivateRoute/AuthRoute'
-import { Route } from 'react-router-dom';
-import ParseService from './services/parseAPI';
+import { Route, withRouter } from 'react-router-dom';
 
 
 // Import all components
@@ -52,5 +51,7 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { unsetClient })(App);
+const AppWithRouter = withRouter(connect(mapStateToProps, { unsetClient })(App));
+
+export default AppWithRouter;
 

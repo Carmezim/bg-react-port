@@ -24,7 +24,7 @@ function* loginFlow (username, password) {
 	let parsePromise;
 	let token;
 	try {
-		// invoke logIn function that communicates with Parse API.
+		// invoke logIn function that communices with Parse API.
 		// Redux Saga pauses here until we successfully log in or
 		// receive an error
 		parsePromise = yield call(ParseService.login, username, password);
