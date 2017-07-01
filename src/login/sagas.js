@@ -1,28 +1,37 @@
-import { take, fork, call, put, cancel, cancelled } from 'redux-saga/effects';
-import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './actionTypes';
-import ParseService from '../services/parseAPI';
-import history from '../history';
-
+import { take, fork, call, put, cancel, cancelled } from "redux-saga/effects";
+import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from "./actionTypes";
+import ParseService from "../services/parseAPI";
+import history from "../history";
 
 // User auth state
-import { setClient } from '../client/actions';
-import { LOGOUT } from '../client/actionTypes';
+import { setClient } from "../client/actions";
+import { LOGOUT } from "../client/actionTypes";
 
+let token;
 
-// handle logout by calling Parse API
-function* logout () {
-	// call parse Api and wait until it finishes
-	yield ParseService.logOut();
-
-	localStorage.removeItem('token');
-
-	// redirect to login page
-	yield call(history.push,"/admin");
+// service calls
+function setAuthToken() {
+	localStorage.setItem("token", JSON.stringify(token));
 }
 
-function* loginFlow (username, password) {
+function removeAuthToken() {
+	localStorage.removeItem("token");
+}
+
+// handle logout by calling Parse API
+function* logout() {
+	// call parse Api and wait until it finishes
+	yield ParseService.logOut();
+	console.log("logout saga");
+
+	yield call(removeAuthToken);
+
+	// redirect to login page
+	yield call(history.push, "/admin");
+}
+
+function* loginFlow(username, password) {
 	let parsePromise;
-	let token;
 	try {
 		// invoke logIn function that communices with Parse API.
 		// Redux Saga pauses here until we successfully log in or
@@ -35,7 +44,7 @@ function* loginFlow (username, password) {
 			// inform Redux to set user token, non blocking.
 			yield put(setClient(token));
 
-			localStorage.setItem('token', JSON.stringify(token))
+			yield call(setAuthToken);
 
 			// informR edux login was successful
 			yield put({ type: LOGIN_SUCCESS });
@@ -45,7 +54,7 @@ function* loginFlow (username, password) {
 		}
 	} catch (error) {
 		// if error, send it to Redux
-		yield put({ type: LOGIN_ERROR, error});
+		yield put({ type: LOGIN_ERROR, error });
 	} finally {
 		// if the forked task is cancelled we then redirect
 		// to login again
@@ -59,7 +68,7 @@ function* loginFlow (username, password) {
 }
 
 // Watcher
-function* loginWatcher () {
+function* loginWatcher() {
 	// Generators halt execution until their next step is ready
 	// so this look isn't firing in the background instead it
 	// compares the boolean and starts the first step

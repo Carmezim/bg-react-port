@@ -1,26 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-
-const LogoutButton = (props) => {
-
-	const { buttonClass, token, onClick } = props;
+const LogoutButton = props => {
+	const { buttonClass, hasToken, onClick } = props;
 
 	return (
 		<div className={buttonClass}>
-			{!!token && (
-				<button onClick={onClick}>
-					Logout
-				</button>)}
+			{!!hasToken && <button onClick={onClick}>Logout</button>}
 		</div>
 	);
 };
 
 LogoutButton.propTypes = {
-	token: PropTypes.string,
+	hasToken: PropTypes.bool,
 	onClick: PropTypes.func.isRequired,
-	buttonClass: PropTypes.string.isRequired,
+	buttonClass: PropTypes.string.isRequired
 };
-
 
 export default LogoutButton;

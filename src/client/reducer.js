@@ -1,29 +1,25 @@
-import Immutable from 'seamless-immutable';
-import { SET_CURRENT_USER, LOGOUT } from './actionTypes';
-
+import Immutable from "seamless-immutable";
+import { SET_CURRENT_USER, LOGOUT } from "./actionTypes";
 
 const initialState = Immutable({
-	token: null,
+	token: null
 });
 
-
 const reducer = (state = initialState, action) => {
-
-	switch(action.type) {
+	switch (action.type) {
 		case SET_CURRENT_USER:
 			return {
-				token: action.token,
+				token: action.token
 			};
 
 		case LOGOUT:
 			return {
-				token: null,
+				token: null
 			};
 
 		default:
 			return state;
 	}
 };
-
 
 export default reducer;

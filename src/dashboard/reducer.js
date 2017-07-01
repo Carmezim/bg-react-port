@@ -1,15 +1,17 @@
-import Immutable from 'seamless-immutable';
-import { CREATE_EVENT, CREATE_EVENT_SUCCESS, CREATE_ERROR } from './actionTypes';
-
+import Immutable from "seamless-immutable";
+import {
+	CREATE_EVENT,
+	CREATE_EVENT_SUCCESS,
+	CREATE_ERROR
+} from "./actionTypes";
 
 const initialState = Immutable({
 	list: [],
 	requesting: false,
 	successful: false,
 	messages: [],
-	errors: [],
+	errors: []
 });
-
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -18,11 +20,13 @@ const reducer = (state = initialState, action) => {
 				...state,
 				requesting: true,
 				successful: false,
-				messages: [{
-					body: `event being created`,
-					time: new Date(),
-				}],
-				errors: [],
+				messages: [
+					{
+						body: `event being created`,
+						time: new Date()
+					}
+				],
+				errors: []
 			};
 
 		// On success include the new event into the list
@@ -32,11 +36,13 @@ const reducer = (state = initialState, action) => {
 				list: state.list.concat([action.event]),
 				requesting: false,
 				successful: true,
-				messages: [{
-					body: `event successfully created`,
-					time: new Date(),
-				}],
-				errors: [],
+				messages: [
+					{
+						body: `event successfully created`,
+						time: new Date()
+					}
+				],
+				errors: []
 			};
 
 		case CREATE_ERROR:
@@ -45,16 +51,17 @@ const reducer = (state = initialState, action) => {
 				requesting: false,
 				successful: false,
 				messages: [],
-				errors: state.errors.concat([{
-					body: action.error.toString(),
-					time: new Date(),
-				}]),
+				errors: state.errors.concat([
+					{
+						body: action.error.toString(),
+						time: new Date()
+					}
+				])
 			};
 
 		default:
 			return state;
 	}
 };
-
 
 export default reducer;

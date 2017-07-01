@@ -1,13 +1,11 @@
-import { LOGIN_REQUESTING } from './actionTypes';
-
+import { LOGIN_REQUESTING } from "./actionTypes";
 
 const loginRequest = ({ username, password }) => {
 	return {
 		type: LOGIN_REQUESTING,
 		username,
-		password,
+		password
 	};
 };
-
 
 export default loginRequest;

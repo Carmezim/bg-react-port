@@ -1,9 +1,9 @@
-import { SIGNUP_REQUESTING } from './actionTypes';
+import { SIGNUP_REQUESTING } from "./actionTypes";
 
-const signupRequest = (email) => {
+const signupRequest = email => {
 	return {
 		type: SIGNUP_REQUESTING,
-		email,
+		email
 	};
 };
 

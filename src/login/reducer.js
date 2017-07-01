@@ -1,12 +1,11 @@
-import Immutable from 'seamless-immutable';
-import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './actionTypes';
-
+import Immutable from "seamless-immutable";
+import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from "./actionTypes";
 
 const initialState = Immutable({
 	requesting: false,
 	successful: false,
 	messages: [],
-	errors: [],
+	errors: []
 });
 
 const reducer = (state = initialState, action = {}) => {
@@ -15,8 +14,8 @@ const reducer = (state = initialState, action = {}) => {
 			return {
 				requesting: true,
 				successful: false,
-				messages: [{ body: "Logging in...", time:  new Date() }],
-				errors: [],
+				messages: [{ body: "Logging in...", time: new Date() }],
+				errors: []
 			};
 
 		case LOGIN_SUCCESS:
@@ -24,24 +23,25 @@ const reducer = (state = initialState, action = {}) => {
 				requesting: false,
 				successful: true,
 				messages: [],
-				errors: [],
+				errors: []
 			};
 
 		case LOGIN_ERROR:
 			return {
 				requesting: false,
 				successful: false,
-				errors: state.errors.concat([{
-					body: action.error.message.toString(),
-					time: new Date(),
-				}]),
-				messages: [],
+				errors: state.errors.concat([
+					{
+						body: action.error.message.toString(),
+						time: new Date()
+					}
+				]),
+				messages: []
 			};
 
 		default:
 			return state;
 	}
 };
-
 
 export default reducer;

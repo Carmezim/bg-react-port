@@ -1,141 +1,143 @@
-import Parse from 'parse';
-import moment from 'moment';
-
+import Parse from "parse";
+import moment from "moment";
 
 export const PAST_EVENTS_LIMIT = 100;
 export const AUTHORS_LIMIT = 200;
 
-
 class ParseService {
 	constructor(props) {
 		Parse.initialize("bookgig", "bookgig");
-		Parse.serverURL = 'http://localhost:1337/parse';
+		Parse.serverURL = "http://localhost:1337/parse";
 	}
 
 	// this function is called on 'sagas.js' and returns the response
 	// that will be inserted into the corresponding dispatched action e.g.
 	// the returned value is dispatched in the SIGNUP_SUCCESS action
-	signupEmail (emailResponse) {
+	signupEmail(emailResponse) {
 		// TODO: check how emails for newsletter will be handled by Parse
 		alert(`Mocking email ${emailResponse.email} submission for newsletter`);
 		return emailResponse;
-	};
-
-
+	}
 
 	// ----------------- USER RELATED METHODS -----------------------
 	// create new user
-	createUSer (username, password) {
+	createUSer(username, password) {
 		let user = new Parse.User();
 		user.set("username", username);
 		user.set("password", password);
 
 		user.signUp(null, {
-			success: function (user) {
-				console.log('New user successfully created');
+			success: function(user) {
+				console.log("New user successfully created");
 			},
-			error: function (user, error) {
-				alert(`Error: ${error.code} ${error.message}`)
+			error: function(user, error) {
+				alert(`Error: ${error.code} ${error.message}`);
 			}
 		});
-	};
-
+	}
 
 	// Log user in returning session token on a successful call.
-	login (username, password) {
-		 return Parse.User.logIn(username, password, {
+	login(username, password) {
+		return Parse.User.logIn(username, password, {
 			success: function(user) {
 				console.log(`Successfully logged user ${username}`);
 			},
 			error: function(user, error) {
-				console.error(`Parse failed to login due to: ${error.code} ${error.message}`);
+				console.error(
+					`Parse failed to login due to: ${error.code} ${error.message}`
+				);
 				// return false;
 			}
 		});
-	};
+	}
 
-	isUserAuthenticated () {
+	isUserAuthenticated() {
 		let currentUser = Parse.User.current();
 		if (currentUser) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
-	};
-
+	}
 
 	// set current user through session token
-	setCurrentUser (token) {
-		return Parse.User.become(token.toString()).then( (user) => {
-			console.log('Token was validated and current user is now set.');
-		}, (error) => {
-			console.error('Token could not be validated');
-		});
-	};
-
+	setCurrentUser(token) {
+		return Parse.User.become(token.toString()).then(
+			user => {
+				console.log("Token was validated and current user is now set.");
+			},
+			error => {
+				console.error("Token could not be validated");
+			}
+		);
+	}
 
 	// Log user out
 	logOut() {
 		if (Parse.User.current()) {
-			console.log(`Current user is ${Parse.User.current().attributes.username}`);
-		}
-		else {
+			console.log(
+				`Current user is ${Parse.User.current().attributes.username}`
+			);
+		} else {
 			console.log(`Current user is ${Parse.User.current()}`);
 		}
 		Parse.User.logOut().then(
-			(success) => {
+			success => {
 				console.log(`User logged out! Current user is ${Parse.User.current()}`);
-		},
-			(error) => {
-				console.error(`Loggout failed due: ${error}`)
+			},
+			error => {
+				console.error(`Loggout failed due: ${error}`);
 			}
-		)
-	};
-
+		);
+	}
 
 	// Load data
-	loadData (type, status, options, callback) {
-
-		const Post = Parse.Object.extend('Event');
+	loadData(type, status, options, callback) {
+		const Post = Parse.Object.extend("Event");
 		const query = new Parse.Query(Post);
 		const promise = new Parse.Promise();
-		query.include('eventBook');
+		query.include("eventBook");
 
-		if ( options.imports ){
-			query.equalTo('importSource', options.imports);
-			query.skip(((options.page||0) * PAST_EVENTS_LIMIT) || 0);
+		if (options.imports) {
+			query.equalTo("importSource", options.imports);
+			query.skip((options.page || 0) * PAST_EVENTS_LIMIT || 0);
 			options.limit = PAST_EVENTS_LIMIT;
 		}
 
-		if (!!options.limit){
+		if (!!options.limit) {
 			query.limit(options.limit); // rows limit
 		} else {
-			query.limit(1000);  // "soft" limit 100 to overwrite the 100 default
+			query.limit(1000); // "soft" limit 100 to overwrite the 100 default
 		}
 
-		if (!!options.sort){
+		if (!!options.sort) {
 			query.ascending(options.sort);
 		} else {
 			query.ascending("startDate");
 		}
 
-		if (typeof(type) !== 'undefined' && type && !options.author){
+		if (typeof type !== "undefined" && type && !options.author) {
 			query.equalTo("type", type);
 		}
 
 		// Search for author
-		if (options.author){
-			query.containsAll('author_search_array', [options.author]);
+		if (options.author) {
+			query.containsAll("author_search_array", [options.author]);
 		}
 
-		if (status !== 'draft' && status !== 'import'){
-			if (status !== 'past'){
+		if (status !== "draft" && status !== "import") {
+			if (status !== "past") {
 				query.equalTo("status", status);
-				query.greaterThanOrEqualTo('endDate', new Date(moment().subtract(12, 'hours')));
+				query.greaterThanOrEqualTo(
+					"endDate",
+					new Date(moment().subtract(12, "hours"))
+				);
 			} else {
-				query.lessThanOrEqualTo('endDate', new Date(moment().subtract(12, 'hours')));
-				query.skip((options.page * PAST_EVENTS_LIMIT) || 0);
+				query.lessThanOrEqualTo(
+					"endDate",
+					new Date(moment().subtract(12, "hours"))
+				);
+				query.skip(options.page * PAST_EVENTS_LIMIT || 0);
 				query.limit(PAST_EVENTS_LIMIT);
 			}
 		} else {
@@ -143,12 +145,11 @@ class ParseService {
 			query.descending("createdAt");
 		}
 
-		query.find().then( (results) => {
-
+		query.find().then(results => {
 			let items = this.prepareData(results);
 
-			if ( options.waitPromise ){
-				options.waitPromise.then( () => {
+			if (options.waitPromise) {
+				options.waitPromise.then(() => {
 					done();
 				});
 				return;
@@ -156,25 +157,20 @@ class ParseService {
 
 			done();
 
-			function done(){
-				callback({'items' : items });
+			function done() {
+				callback({ items: items });
 				promise.resolve({
-					items : items
+					items: items
 				});
 			}
-
-		},function(error) {
-			console.log('error',error);
+		}, function(error) {
+			console.log("error", error);
 			promise.reject(error);
 			return false;
 		});
-	};
-
-	prepareData(results) {
-
 	}
 
-
+	prepareData(results) {}
 }
 
 export default new ParseService();

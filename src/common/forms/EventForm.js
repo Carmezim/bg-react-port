@@ -1,18 +1,14 @@
-import React from 'react';
-import { Field } from 'redux-form';
-
+import React from "react";
+import { Field } from "redux-form";
 
 // Validation for form fields
-export const nameRequired = value => (value ? undefined : 'Name Required');
+export const nameRequired = value => (value ? undefined : "Name Required");
 
 //
-export const renderNameInput = ({ input, type, meta: { touched, error } }) => (
+export const renderNameInput = ({ input, type, meta: { touched, error } }) =>
 	<div>
 		{/* Spread RF's input properties onto our input */}
-		<input
-			{...input}
-			type={type}
-		/>
+		<input {...input} type={type} />
 		{/*{
 		 if form is active and in error display 'error',
 		 returned from 'nameRequired' function
@@ -20,18 +16,17 @@ export const renderNameInput = ({ input, type, meta: { touched, error } }) => (
 		 whether or not a field has been "touched" by a user.  This means
 		 focused at least once.
 		 }*/}
-		{touched && error && (
-			<div style={{ color: '#cc7a6f', margin: '-10px 0 15px', fontSize: '0.7rem' }}>
+		{touched &&
+			error &&
+			<div
+				style={{ color: "#cc7a6f", margin: "-10px 0 15px", fontSize: "0.7rem" }}
+			>
 				{error}
-			</div>
-		)}
-	</div>
-);
+			</div>}
+	</div>;
 
-
-const EventTemplate = (props) => {
-
-	const {submit, invalid} = props;
+const EventTemplate = props => {
+	const { submit, invalid } = props;
 
 	return (
 		<div>
@@ -126,13 +121,12 @@ const EventTemplate = (props) => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<button
-					disabled={invalid}
-					action="submit"
-				>Submit</button>
+				<button disabled={invalid} action="submit">
+					Submit
+				</button>
 			</form>
 		</div>
-	)
+	);
 };
 
 export default EventTemplate;
