@@ -8,7 +8,7 @@ const PUBLIC_ROOT = '/admin';
 
 const AuthRoute = ({component, ...props}) => {
 
-	const {isPrivate, token } = props;
+	const { isPrivate, token } = props;
 	const isAuthenticated = token ? true : false;	
 	
 	if (isAuthenticated) {

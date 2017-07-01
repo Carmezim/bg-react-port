@@ -12,7 +12,7 @@ import Errors from '../common/notifications/Errors';
 import loginRequest from './actions';
 
 
-class Login extends Component {eh
+class Login extends Component {
 
 	// prop validation
 	static propTypes = {
@@ -92,10 +92,12 @@ class Login extends Component {eh
 		);
 	}
 }
+
 // Getting only the piece of state we need for this component from the global state
 const mapStateToProps = state => ({
 	login: state.login,
 });
+
 // Making the login state piece we've got and 'loginRequest' action
 // available in this.props within this component (Login)
 const connected = connect(mapStateToProps, { loginRequest })(Login);

@@ -16,7 +16,7 @@ import './App.css';
 
 
 // import actions
-import { setClient, unsetClient } from './client/actions'
+import { unsetClient } from './client/actions'
 
 
 class App extends Component {
@@ -24,7 +24,6 @@ class App extends Component {
 	static propTypes = {
 		children: PropTypes.node,
 	};
-
 
 	render() {
 
