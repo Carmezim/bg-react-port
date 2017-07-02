@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Switch } from "react-router-dom";
 import PropTypes from "prop-types";
-import PrivateRoute from "./common/PrivateRoute/AuthRoute";
+import PrivateRoute from "./common/privateroute/AuthRoute";
 import { Route, withRouter } from "react-router-dom";
 
 // Import all components

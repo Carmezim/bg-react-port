@@ -2,10 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const LogoutButton = props => {
-	const { buttonClass, hasToken, onClick } = props;
+	const { className, hasToken, onClick } = props;
 
 	return (
-		<div className={buttonClass}>
+		<div className={className}>
 			{!!hasToken && <button onClick={onClick}>Logout</button>}
 		</div>
 	);
