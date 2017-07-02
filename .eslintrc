@@ -1,9 +1,14 @@
-module.exports = {
-  parser: 'babel-eslint',
-  extends: [
-    require.resolve('./packages/eslint-config-fbjs'),
+ {
+  "parser": "babel-eslint",
+  "extends": [
+    "prettier",
+    "prettier/react"
+    // "require.resolve('./packages/eslint-config-fbjs')",
   ],
-  rules: {
-
+  "plugins": [ "prettier" ],
+  "rules": {
+    "prettier/prettier": ["error", {
+    "useTabs": true
+    }]
 	}
-};
+}
