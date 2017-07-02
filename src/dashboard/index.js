@@ -13,7 +13,7 @@ import { createEvent } from "./actions";
 // Import components
 import EventTemplate from "../common/forms/EventForm";
 import ListItem from "../common/listitem/ListItem";
-import Item from "../common/draganddrop/DragItem";
+import DragListItem from "../common/draganddrop/Drag";
 
 class Dashboard extends Component {
 	// prop validation
@@ -34,10 +34,14 @@ class Dashboard extends Component {
 		reset: PropTypes.func.isRequired
 	};
 
-	submit = eventToCreate => {
+	constructor(props) {
+		super(props);
+	}
+
+	submit = createBookEvent => {
 		const { client, createEvent, reset } = this.props;
 
-		createEvent(client, eventToCreate);
+		createEvent(client, createBookEvent);
 
 		reset();
 	};
@@ -65,7 +69,9 @@ class Dashboard extends Component {
 
 		return (
 			<div className="admin-dashboard">
-				<Item text="draggable item" />
+				<DragListItem component={<div>Draggable Element 1</div>} />
+				<DragListItem component={<div>Draggable Element 2</div>} />
+				<DragListItem component={<div>Draggable Element 3</div>} />
 				<h1>Dashboard</h1>
 				<div className="create-event-form">
 					<EventTemplate submit={handleSubmit(this.submit)} invalid={invalid} />

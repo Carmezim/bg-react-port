@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { DragSource } from "react-dnd";
-import { ITEM } from "./constants";
+import { ITEM } from "./Constants";
 
 const itemSource = {
 	beginDrag(props) {
@@ -19,24 +19,22 @@ function collect(connect, monitor) {
 }
 
 const propTypes = {
-	text: PropTypes.string.isRequired,
+	listItem: PropTypes.node.isRequired,
 
 	// Injected by React DnD:
 	isDragging: PropTypes.bool.isRequired,
 	connectDragSource: PropTypes.func.isRequired
 };
 
-class Item extends React.Component {
-	render() {
-		const { isDragging, connectDragSource, text } = this.props;
-		return connectDragSource(
-			<div style={{ opacity: isDragging ? 0.5 : 1 }}>
-				{text}
-			</div>
-		);
-	}
-}
+const DraggableComponent = props => {
+	const { isDragging, connectDragSource, listItem } = props;
+	return connectDragSource(
+		<div style={{ opacity: isDragging ? 0.5 : 1 }}>
+			{listItem}
+		</div>
+	);
+};
 
-Item.propTypes = propTypes;
+DragListItem.propTypes = propTypes;
 
-export default DragSource(ITEM, itemSource, collect)(Item);
+export default DragSource(ITEM, itemSource, collect)(DragListItem);
