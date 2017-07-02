@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { applyMiddleware, createStore, compose } from "redux";
+import { persistStore, autoRehydrate } from "redux-persist";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 import { Router } from "react-router-dom";
@@ -33,10 +34,18 @@ const composeSetup =
 		? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 		: compose;
 
+// Create the store
+// 'autoRehydrate' is a store enhancer that will automatically shallow merge the persisted state
+// for each key. Additionally it queues any actions that are dispatched before rehydration is complete,
+// and fires them after rehydration is finished.
 const store = createStore(
 	IndexReducer,
-	composeSetup(applyMiddleware(sagaMiddleware)) // allows redux devtools to watch sagas
+	composeSetup(applyMiddleware(sagaMiddleware), autoRehydrate()) // allows redux devtools to watch sagas
 );
+
+// Begins periodically persisting the store
+// Redux-Persist assists in persists the state on browser refresh
+persistStore(store);
 
 // Begin Index Saga
 sagaMiddleware.run(IndexSagas);

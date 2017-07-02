@@ -7,8 +7,9 @@ const PRIVATE_ROOT = "/dashboard";
 const PUBLIC_ROOT = "/admin";
 
 const AuthRoute = ({ component, ...props }) => {
-	const { isPrivate, token } = props;
+	const { isPrivate, client: { token } } = props;
 	const isAuthenticated = token ? true : false;
+	console.log(`token PrivateRoute: ${token}`);
 
 	if (isAuthenticated) {
 		//User is Authenticated
@@ -38,8 +39,17 @@ const AuthRoute = ({ component, ...props }) => {
 	}
 };
 
+const mapStateToProps = state => ({
+	client: state.client
+});
+
+
 AuthRoute.propTypes = {
-	component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
+	component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+	isPrivate: PropTypes.bool.isRequired,
+	client: PropTypes.shape({
+		token: PropTypes.string
+	})
 };
 
-export default AuthRoute;
+export default connect(mapStateToProps)(AuthRoute);

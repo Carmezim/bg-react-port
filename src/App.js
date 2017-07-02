@@ -21,14 +21,11 @@ class App extends Component {
 
 	render() {
 		const { client: { token }, unsetClient } = this.props;
-		const hasLocalToken = localStorage.getItem("token") ? true : false;
-		console.log(hasLocalToken);
-		console.log(token);
 
 		return (
 			<div className="App">
 				<div className="app-header">
-					{!!hasLocalToken && <button onClick={unsetClient}>Logout</button>}
+					{!!token && <button onClick={unsetClient}>Logout</button>}
 				</div>
 				<section className="app-body">
 					<Switch>
@@ -44,7 +41,7 @@ class App extends Component {
 							path="/dashboard"
 							component={Dashboard}
 						/>
-						<PrivateRoute exact isPrivate={false} path="/" component={Signup} />
+						<Route exact isPrivate={false} path="/" component={Signup} />
 					</Switch>
 				</section>
 			</div>
