@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 // import ReactCrop from 'react-image-crop';
+import ReactList from "react-list";
 import { reduxForm } from "redux-form";
 import { connect } from "react-redux";
 
@@ -9,6 +10,7 @@ import { createEvent } from "./actions";
 
 // Import components
 import EventTemplate from "../common/forms/EventForm";
+import ListItem from "../common/listitem/ListItem";
 
 class Dashboard extends Component {
 	// prop validation
@@ -37,6 +39,19 @@ class Dashboard extends Component {
 		reset();
 	};
 
+	// Return infinite list item
+	renderItem(index, key) {
+		const { list } = this.props;
+		console.log(list);
+		return (
+			<ListItem
+				className="finfinite-list-item"
+				key={key}
+				content={list[index]}
+			/>
+		);
+	}
+
 	render() {
 		const {
 			handleSubmit,
@@ -44,13 +59,20 @@ class Dashboard extends Component {
 			client,
 			dashboard: { list, requesting, successful, messages, errors }
 		} = this.props;
-
+		console.log(list)
 		return (
 			<div className="admin-dashboard">
 				<h1>Dashboard</h1>
 				<div className="create-event-form">
 					<EventTemplate submit={handleSubmit(this.submit)} invalid={invalid} />
 					<hr />
+				</div>
+				<div className="intinite-list">
+					<ReactList
+						itemRenderer={this.renderItem}
+						length={list.length}
+						type="uniform"
+					/>
 				</div>
 			</div>
 		);
