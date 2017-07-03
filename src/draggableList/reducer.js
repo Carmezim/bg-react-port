@@ -1,7 +1,7 @@
 import { MOVE_LIST_ITEM } from "./actionTypes";
 
 const initialState = {
-	items: [
+	listItems: [
 		{
 			id: 1,
 			text: "Event 1"
@@ -34,12 +34,15 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-	const { list, dragIndex, hoverIndex, dragItem } = action;
+	const { listItems, dragIndex, hoverIndex, dragItem } = action;
 
 	switch (action.type) {
 		case MOVE_LIST_ITEM:
 			return {
-				items: state.items.splice([dragIndex, 1], [hoverIndex, 0, dragItem])
+				listItems: state.listItems.splice(
+					[dragIndex, 1],
+					[hoverIndex, 0, dragItem]
+				)
 			};
 
 		default:

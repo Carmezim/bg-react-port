@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import PorpTypes from "prop-types";
+import PropTypes from "prop-types";
 import { DragDropContext } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 
@@ -21,15 +21,14 @@ class ListItem extends Component {
 
 	render() {
 		const { listItems } = this.props;
-
 		return (
 			<div className="draggable-list">
 				{listItems.map((item, i) => (
 					<Item
 						key={item.id}
 						index={i}
-						id={card.id}
-						item={card.text}
+						id={item.id}
+						item={item.text}
 						moveItem={this.moveItem}
 					/>
 				))}
@@ -39,7 +38,7 @@ class ListItem extends Component {
 }
 
 const mapStateToPros = state => ({
-	draggable: state.draggable
+	listItems: state.draggable.listItems
 });
 
 ListItem = DragDropContext(HTML5Backend)(ListItem);

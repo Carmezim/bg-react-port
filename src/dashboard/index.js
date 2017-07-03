@@ -4,16 +4,13 @@ import PropTypes from "prop-types";
 import ReactList from "react-list";
 import { reduxForm } from "redux-form";
 import { connect } from "react-redux";
-import { DragDropContext } from "react-dnd";
-import HTML5Backend from "react-dnd-html5-backend";
 
 // Import actions
 import { createEvent } from "./actions";
 
 // Import components
 import EventTemplate from "../common/forms/EventForm";
-import ListItem from "../common/listitem/ListItem";
-import DragListItem from "../common/draganddrop/Drag";
+import ListItem from "../draggableList";
 
 class Dashboard extends Component {
 	// prop validation
@@ -69,9 +66,7 @@ class Dashboard extends Component {
 
 		return (
 			<div className="admin-dashboard">
-				<DragListItem component={<div>Draggable Element 1</div>} />
-				<DragListItem component={<div>Draggable Element 2</div>} />
-				<DragListItem component={<div>Draggable Element 3</div>} />
+				<ListItem />
 				<h1>Dashboard</h1>
 				<div className="create-event-form">
 					<EventTemplate submit={handleSubmit(this.submit)} invalid={invalid} />
@@ -104,4 +99,4 @@ const formed = reduxForm({
 	form: "dashboard"
 })(connected);
 
-export default DragDropContext(HTML5Backend)(formed);
+export default formed;

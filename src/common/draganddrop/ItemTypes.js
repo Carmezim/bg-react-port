@@ -1,1 +1,3 @@
-export const ITEM = "ITEM";
+export default {
+	ITEM: "item"
+};

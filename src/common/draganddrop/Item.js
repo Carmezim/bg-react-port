@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
 import { DragSource, DropTarget } from "react-dnd";
 import ItemTypes from "./ItemTypes";
+import { flow } from "lodash";
 
 const style = {
 	border: "1px dashed gray",
@@ -68,14 +69,24 @@ const itemTarget = {
 	}
 };
 
-@DropTarget(ItemTypes.ITEM, itemTarget, connect => ({
-	connectDropTarget: connect.dropTarget()
-}))
-@DragSource(ItemTypes.ITEM, itemSource, (connect, monitor) => ({
-	connectDragSource: connect.dragSource(),
-	isDragging: monitor.isDragging()
-}))
-export default class Item extends Component {
+const colletctDrop = (
+	ItemTypes.ITEM,
+	itemTarget,
+	connect => ({
+		connectDropTarget: connect.dropTarget()
+	})
+);
+
+const collectDrag = (
+	ItemTypes.ITEM,
+	itemSource,
+	(connect, monitor) => ({
+		connectDragSource: connect.dragSource(),
+		isDragging: monitor.isDragging()
+	})
+);
+
+class Item extends Component {
 	static propTypes = {
 		connectDragSource: PropTypes.func.isRequired,
 		connectDropTarget: PropTypes.func.isRequired,
@@ -105,3 +116,8 @@ export default class Item extends Component {
 		);
 	}
 }
+
+export default flow(
+	DragSource(ItemTypes.ITEM, itemSource, collectDrag),
+	DropTarget(ItemTypes.ITEM, itemTarget, colletctDrop)
+)(Item);
