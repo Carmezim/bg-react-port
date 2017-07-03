@@ -34,8 +34,7 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-	const { listItems, dragIndex, hoverIndex, dragItem } = action;
-
+	const { dragIndex, hoverIndex, dragItem } = action;
 	switch (action.type) {
 		case MOVE_LIST_ITEM:
 			return {

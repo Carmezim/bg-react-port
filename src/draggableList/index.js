@@ -13,11 +13,18 @@ import moveItem from "./actions";
 class ListItem extends Component {
 	constructor(props) {
 		super(props);
+		this.move = this.move.bind(this);
 	}
 
 	static propTypes = {
 		listItems: PropTypes.array
 	};
+
+	move(dragIndex, hoverIndex) {
+		const { listItems } = this.props;
+		const dragItem = listItems[dragIndex];
+		moveItem(dragIndex, hoverIndex, dragItem);
+	}
 
 	render() {
 		const { listItems } = this.props;
@@ -29,7 +36,7 @@ class ListItem extends Component {
 						index={i}
 						id={item.id}
 						item={item.text}
-						moveItem={this.moveItem}
+						moveItem={this.move}
 					/>
 				))}
 			</div>

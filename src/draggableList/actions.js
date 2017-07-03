@@ -1,10 +1,8 @@
 import { MOVE_LIST_ITEM } from "./actionTypes";
 
-export const moveItem = (listItems, dragIndex, hoverIndex) => {
-	const dragItem = listItems[dragIndex];
+export const moveItem = (dragIndex, hoverIndex, dragItem) => {
 	return {
 		type: MOVE_LIST_ITEM,
-		listItems,
 		dragIndex,
 		hoverIndex,
 		dragItem
