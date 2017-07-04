@@ -3,7 +3,7 @@ import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from "./actionTypes";
 import ParseService from "../services/parseAPI";
 import history from "../history";
 
-// User auth state
+// user auth state
 import { setClient } from "../client/actions";
 import { LOGOUT } from "../client/actionTypes";
 
@@ -46,7 +46,7 @@ function* loginFlow(username, password) {
 
 			yield call(setAuthToken);
 
-			// informR edux login was successful
+			// inform Redux login was successful
 			yield put({ type: LOGIN_SUCCESS });
 
 			// place a redirect here to dashboard panel when ready
@@ -67,7 +67,7 @@ function* loginFlow(username, password) {
 	}
 }
 
-// Watcher
+// watcher
 function* loginWatcher() {
 	// Generators halt execution until their next step is ready
 	// so this look isn't firing in the background instead it
