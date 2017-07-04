@@ -1,12 +1,15 @@
-import { MOVE_LIST_ITEM } from "./actionTypes";
+import {
+	MOVE_ITEM_REQUEST,
+	MOVE_ITEM_SUCCESS,
+	MOVE_ITEM_ERROR
+} from "./actionTypes";
 
-export const moveItem = (dragIndex, hoverIndex, dragItem) => {
+export const moveItemRequest = (itemsList, dragIndex, hoverIndex, dragItem) => {
 	return {
-		type: MOVE_LIST_ITEM,
+		type: MOVE_ITEM_REQUEST,
+		itemsList,
 		dragIndex,
 		hoverIndex,
 		dragItem
 	};
 };
-
-export default moveItem;
