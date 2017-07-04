@@ -8,7 +8,6 @@ import {
 } from "./actionTypes";
 
 const initialState = Immutable({
-	pending: false,
 	itemsList: [
 		{
 			id: 1,
@@ -38,7 +37,8 @@ const initialState = Immutable({
 			id: 7,
 			text: "BOOKS BOOKS BOOKS 7"
 		}
-	]
+	],
+	pending: false
 });
 
 // handles requests for items to be dragged by
@@ -46,7 +46,7 @@ const initialState = Immutable({
 // by 'moveItemReques' action when items on the list are dragged
 const reducer = (state = initialState, action) => {
 	const { itemsList } = state;
-	const { dragIndex, hoverIndex, dragItem, result } = action;
+	const { result } = action;
 
 	switch (action.type) {
 		case MOVE_ITEM_REQUEST:

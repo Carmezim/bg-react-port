@@ -18,22 +18,25 @@ class ListItem extends Component {
 	}
 
 	static propTypes = {
-		listItems: PropTypes.array,
+		draggable: PropTypes.shape({
+			itemsList: PropTypes.array,
+			pending: PropTypes.bool
+		}),
 		moveItemRequest: PropTypes.func
 	};
 
 	moveItem(dragIndex, hoverIndex) {
-		const { itemsList } = this.props;
-		const dragItem = itemsList[dragIndex];
-		this.props.moveItemRequest(itemsList, dragIndex, hoverIndex, dragItem);
+		const { draggable: itemsList } = this.props;
+		const dragItem = itemsList.itemsList[dragIndex];
+		this.props.moveItemRequest(itemsList.itemsList, dragIndex, hoverIndex, dragItem);
 	}
 
 	render() {
-		const { itemsList } = this.props;
-
+		const { draggable: itemsList } = this.props;
+		console.log(itemsList);
 		return (
 			<div className="draggable-list">
-				{itemsList
+				{itemsList.itemsList
 					.filter(item => item !== null)
 					.map((item, i) =>
 						<Item
@@ -50,7 +53,7 @@ class ListItem extends Component {
 }
 
 const mapStateToProps = state => ({
-	itemsList: state.draggable.itemsList
+	draggable: state.draggable
 });
 
 export default flow(
