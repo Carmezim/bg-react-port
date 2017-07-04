@@ -9,7 +9,6 @@ const PUBLIC_ROOT = "/admin";
 const AuthRoute = ({ component, ...props }) => {
 	const { isPrivate, client: { token } } = props;
 	const isAuthenticated = token ? true : false;
-	console.log(`token PrivateRoute: ${token}`);
 
 	if (isAuthenticated) {
 		//User is Authenticated

@@ -93,7 +93,7 @@ class Item extends Component {
 		index: PropTypes.number.isRequired,
 		isDragging: PropTypes.bool.isRequired,
 		id: PropTypes.any.isRequired,
-		text: PropTypes.string.isRequired,
+		item: PropTypes.string.isRequired,
 		moveItem: PropTypes.func.isRequired
 	};
 
@@ -109,7 +109,7 @@ class Item extends Component {
 
 		return connectDragSource(
 			connectDropTarget(
-				<div className="draggable-list-item">
+				<div style={{ ...style, opacity }} className="draggable-list-item">
 					{item}
 				</div>
 			)
