@@ -19,6 +19,9 @@ const itemSource = {
 			id: props.id,
 			index: props.index
 		};
+	},
+	isDragging(props, monitor) {
+		return props.index === monitor.getItem().id;
 	}
 };
 
@@ -105,7 +108,7 @@ class Item extends Component {
 			connectDropTarget
 		} = this.props;
 
-		const opacity = isDragging ? 0 : 1;
+		const opacity = isDragging ? 0.5 : 1;
 
 		return connectDragSource(
 			connectDropTarget(
