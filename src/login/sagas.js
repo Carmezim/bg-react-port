@@ -44,6 +44,7 @@ function* loginFlow(username, password) {
 			// inform Redux to set user token, non blocking.
 			yield put(setClient(token));
 
+			// add token to localStorage
 			yield call(setAuthToken);
 
 			// inform Redux login was successful
