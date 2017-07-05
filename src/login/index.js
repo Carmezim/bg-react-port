@@ -5,9 +5,13 @@ import { reduxForm, Field } from "redux-form";
 
 // helpers
 import Errors from "../common/notifications/Errors";
+import Messages from "../common/notifications/Messages";
 
 // import action
 import loginRequest from "./actions";
+
+// style
+import "./index.css";
 
 class Login extends Component {
 	// prop validation
@@ -36,16 +40,13 @@ class Login extends Component {
 		} = this.props;
 
 		return (
-			<div className="login">
-				<form
-					className="cd-form floating-labels login-form"
-					onSubmit={handleSubmit(this.submit)}
-				>
+			<div className="cd-form login">
+				<form className="login-form" onSubmit={handleSubmit(this.submit)}>
 					<fieldset>
 						<legend>Admin Console</legend>
 
 						<div className="icon">
-							<label htmlFor="username">Username</label>
+							<label className="cd-label" htmlFor="username">Username</label>
 							<Field
 								name="username"
 								type="text"
@@ -56,7 +57,7 @@ class Login extends Component {
 						</div>
 
 						<div className="icon">
-							<label htmlFor="password">Password</label>
+							<label className="cd-label" htmlFor="password">Password</label>
 							<Field
 								name="password"
 								type="password"
@@ -72,15 +73,16 @@ class Login extends Component {
 					{/* Some loggin handling */}
 					{!requesting &&
 						!!errors.length &&
-						<Errors message="Failure to login due to:" errors={errors} />}
-					{!requesting && !!messages.length && console.log(messages)}
+						<Errors className="error-message" errors={errors} />}
+					{!requesting && 
+						!!messages.length &&
+						<Messages className="info-message" messages={messages} />}
 					{requesting && <div>Logging in...</div>}
 					{!requesting &&
 						!successful &&
 						<div>
 							Don't have an account yet? You need to create one to login.
 						</div>}
-					{/*{successful && <Redirect to="/dashboard" />}*/}
 				</div>
 			</div>
 		);
