@@ -38,33 +38,50 @@ const initialState = Immutable({
 			text: "BOOKS BOOKS BOOKS 7"
 		}
 	],
-	pending: false
+	requesting: false,
+	messages: [],
+	errors: []
 });
 
-// handles requests for items to be dragged by
-// receiving current state from saga sent through the container
-// by 'moveItemReques' action when items on the list are dragged
+// handles requests for items to be dragged by receiving current state
+// from saga sent from the container by 'moveItemReques' action
+// which is fired when items on the list are dragged.
+// Then once the saga saw the request taking place it will reorder the list
+// and return a new re-ordered list on success, updating this way the draggable
+// list state
 const reducer = (state = initialState, action) => {
-	const { itemsList } = state;
-	const { result } = action;
-
 	switch (action.type) {
 		case MOVE_ITEM_REQUEST:
 			return {
-				pending: true,
-				itemsList: result
+				...state,
+				requesting: true,
+				messages: state.messages.concat([
+					{
+						body: "Requesting to move draggable item",
+						time: new Date()
+					}
+				]),
+				itemsList: action.itemsList
 			};
 
 		case MOVE_ITEM_SUCCESS:
 			return {
-				...state,
-				pending: false
+				itemsList: action.reorderedList,
+				requesting: false,
+				messages: [],
+				error: []
 			};
 
 		case MOVE_ITEM_ERROR:
 			return {
 				...state,
-				pending: false
+				requesting: false,
+				errors: state.errors.concat([
+					{
+						body: action.error.toString(),
+						time: new Date()
+					}
+				])
 			};
 
 		default:
