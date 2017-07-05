@@ -4,5 +4,5 @@ import LoginSaga from "./login/sagas";
 import dndWatcher from "./draggableList/sagas";
 
 export default function* IndexSaga() {
-	yield all([SignupSaga(), LoginSaga()]);
+	yield all([SignupSaga(), LoginSaga(), dndWatcher()]);
 }
