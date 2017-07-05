@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Errors = props => {
-	const { className, errors } = props;
+const Messages = props => {
+	const { className, messages } = props;
 	return (
 		<div className={className}>
 			<ul>
-				{errors.map(error =>
-					<li key={error.time}>
-						{error.body}
+				{messages.map(message =>
+					<li key={message.time}>
+						{message.body}
 					</li>
 				)}
 			</ul>
@@ -16,8 +16,8 @@ const Errors = props => {
 	);
 };
 
-Errors.propTypes = {
-	errors: PropTypes.arrayOf(
+Messages.propTypes = {
+	messages: PropTypes.arrayOf(
 		PropTypes.shape({
 			body: PropTypes.string,
 			time: PropTypes.date
@@ -25,4 +25,4 @@ Errors.propTypes = {
 	)
 };
 
-export default Errors;
+export default Messages;
