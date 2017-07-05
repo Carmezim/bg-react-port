@@ -1,5 +1,7 @@
-import React from "react";
-import { Field } from "redux-form";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Field, reduxForm } from "redux-form";
+import submit from "./submit";
 
 // Validation for form fields
 export const nameRequired = value => (value ? undefined : "Name Required");
@@ -26,11 +28,11 @@ export const renderNameInput = ({ input, type, meta: { touched, error } }) =>
 	</div>;
 
 const EventTemplate = props => {
-	const { submit, invalid } = props;
+	const { handleSubmit, invalid } = props;
 
 	return (
 		<div>
-			<form onSubmit={submit}>
+			<form onSubmit={handleSubmit}>
 				<label htmlFor="Title">Title</label>
 				<Field
 					name="title"
@@ -121,12 +123,18 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<button disabled={invalid} action="submit">
-					Submit
-				</button>
 			</form>
 		</div>
 	);
 };
 
-export default EventTemplate;
+EventTemplate.propTypes = {
+	handleSubmit: PropTypes.func,
+	invalid: PropTypes.bool
+};
+
+// submit function must be passed to onSubmit
+export default reduxForm({
+	form: "EventTemplate",
+	onSubmit: submit
+})(EventTemplate);

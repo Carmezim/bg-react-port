@@ -2,21 +2,21 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 // import ReactCrop from 'react-image-crop';
 import ReactList from "react-list";
-import { reduxForm } from "redux-form";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 // Import actions
-import { createEvent } from "./actions";
 
 // Import components
 import EventTemplate from "../common/forms/EventForm";
+import Button from "../common/forms/Button";
 import ListItem from "../draggableList";
 
 class Dashboard extends Component {
 	// prop validation
 	static propTypes = {
-		handleSubmit: PropTypes.func.isRequired,
-		invalid: PropTypes.bool.isRequired,
+		// handleSubmit: PropTypes.func.isRequired,
+		// invalid: PropTypes.bool.isRequired,
 		client: PropTypes.shape({
 			token: PropTypes.string // add required
 		}),
@@ -27,21 +27,13 @@ class Dashboard extends Component {
 			messages: PropTypes.array,
 			errors: PropTypes.array
 		}).isRequired,
-		createEvent: PropTypes.func.isRequired,
-		reset: PropTypes.func.isRequired
+		// createEvent: PropTypes.func.isRequired,
+		// reset: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 	}
-
-	submit = createBookEvent => {
-		const { client, createEvent, reset } = this.props;
-
-		createEvent(client, createBookEvent);
-
-		reset();
-	};
 
 	// Return infinite list item
 	renderItem(index, key) {
@@ -58,7 +50,6 @@ class Dashboard extends Component {
 
 	render() {
 		const {
-			handleSubmit,
 			invalid,
 			client,
 			dashboard: { list, requesting, successful, messages, errors }
@@ -69,7 +60,10 @@ class Dashboard extends Component {
 				<ListItem />
 				<h1>Dashboard</h1>
 				<div className="create-event-form">
-					<EventTemplate submit={handleSubmit(this.submit)} invalid={invalid} />
+					<div>
+						<EventTemplate invalid={invalid} />
+						<Button />
+					</div>
 					<hr />
 				</div>
 				<div className="intinite-list">
@@ -95,8 +89,16 @@ const mapStateToProps = state => ({
 const connected = connect(mapStateToProps, { createEvent })(Dashboard);
 
 // In our state this form will be available in 'form.login'
-const formed = reduxForm({
-	form: "dashboard"
-})(connected);
+// const formed = reduxForm({
+// 	form: "dashboard"
+// })(connected);
 
-export default formed;
+// <Link
+// 	to={{
+// 		pathname: "/addevent",
+// 		submit: handleSubmit(this.submit)
+// 	}}
+// >
+// 	Add Event
+// </Link>
+export default connected;
