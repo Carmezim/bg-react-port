@@ -8,6 +8,11 @@ class ParseService {
 	constructor(props) {
 		Parse.initialize("bookgig", "bookgig");
 		Parse.serverURL = "http://localhost:1337/parse";
+
+		this.EventClass = Parse.Object.extend("Event");
+		this.EventBooks = Parse.Object.extend("EventBooks");
+		this.Author = Parse.Object.extend("Author");
+		this.Category = Parse.Object.extend("Category");
 	}
 
 	// this function is called on 'sagas.js' and returns the response
@@ -91,86 +96,21 @@ class ParseService {
 		);
 	}
 
-	// Load data
-	loadData(type, status, options, callback) {
-		const Post = Parse.Object.extend("Event");
-		const query = new Parse.Query(Post);
-		const promise = new Parse.Promise();
-		query.include("eventBook");
+	//------------------------------------DATA RELATED METHODS -------------------------
+	loadEvents() {
+		const event = new Parse.Query(this.EventClass);
 
-		if (options.imports) {
-			query.equalTo("importSource", options.imports);
-			query.skip((options.page || 0) * PAST_EVENTS_LIMIT || 0);
-			options.limit = PAST_EVENTS_LIMIT;
-		}
+		// const name = event.get("name");
+		// const title = event.get("title");
+		// const startDate = event.get("startDate");
+		// const startTime = event.get("startTime");
+		// const price = event.get("price");
+		// const order = event.get("order");
 
-		if (!!options.limit) {
-			query.limit(options.limit); // rows limit
-		} else {
-			query.limit(1000); // "soft" limit 100 to overwrite the 100 default
-		}
-
-		if (!!options.sort) {
-			query.ascending(options.sort);
-		} else {
-			query.ascending("startDate");
-		}
-
-		if (typeof type !== "undefined" && type && !options.author) {
-			query.equalTo("type", type);
-		}
-
-		// Search for author
-		if (options.author) {
-			query.containsAll("author_search_array", [options.author]);
-		}
-
-		if (status !== "draft" && status !== "import") {
-			if (status !== "past") {
-				query.equalTo("status", status);
-				query.greaterThanOrEqualTo(
-					"endDate",
-					new Date(moment().subtract(12, "hours"))
-				);
-			} else {
-				query.lessThanOrEqualTo(
-					"endDate",
-					new Date(moment().subtract(12, "hours"))
-				);
-				query.skip(options.page * PAST_EVENTS_LIMIT || 0);
-				query.limit(PAST_EVENTS_LIMIT);
-			}
-		} else {
-			query.equalTo("status", status);
-			query.descending("createdAt");
-		}
-
-		query.find().then(results => {
-			let items = this.prepareData(results);
-
-			if (options.waitPromise) {
-				options.waitPromise.then(() => {
-					done();
-				});
-				return;
-			}
-
-			done();
-
-			function done() {
-				callback({ items: items });
-				promise.resolve({
-					items: items
-				});
-			}
-		}, function(error) {
-			console.log("error", error);
-			promise.reject(error);
-			return false;
+		event.find("name").then(result => {
+			console.log(result);
 		});
 	}
-
-	prepareData(results) {}
 }
 
 export default new ParseService();

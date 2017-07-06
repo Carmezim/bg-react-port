@@ -9,6 +9,7 @@ import { Route, withRouter } from "react-router-dom";
 import Login from "./login";
 import Dashboard from "./dashboard";
 import Signup from "./signup";
+import EventForm from "./common/forms/EventForm";
 import "./App.css";
 
 // import actions
@@ -41,7 +42,13 @@ class App extends Component {
 							path="/dashboard"
 							component={Dashboard}
 						/>
-						<Route exact isPrivate={false} path="/" component={Signup} />
+						<PrivateRoute
+							token={token}
+							isPrivate={true}
+							path="/addevent"
+							component={EventForm}
+						/>
+						<Route exact path="/" component={Signup} />
 					</Switch>
 				</section>
 			</div>

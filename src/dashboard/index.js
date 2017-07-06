@@ -4,8 +4,7 @@ import PropTypes from "prop-types";
 import ReactList from "react-list";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-
-// Import actions
+import ParseService from "../services/parseAPI";
 
 // Import components
 import EventTemplate from "../common/forms/EventForm";
@@ -37,14 +36,12 @@ class Dashboard extends Component {
 
 	// Return infinite list item
 	renderItem(index, key) {
-		const { list } = this.props;
-		console.log(list);
+		let names = ParseService.loadEvents();
+		console.log(names)
 		return (
-			<ListItem
-				className="finfinite-list-item"
-				key={key}
-				content={list[index]}
-			/>
+			<div className="infinite-list-item" key={key}>
+				{names[index]}
+			</div>
 		);
 	}
 
@@ -54,7 +51,7 @@ class Dashboard extends Component {
 			client,
 			dashboard: { list, requesting, successful, messages, errors }
 		} = this.props;
-
+		let listLength = 100;
 		return (
 			<div className="admin-dashboard">
 				<ListItem />
@@ -69,7 +66,7 @@ class Dashboard extends Component {
 				<div className="intinite-list">
 					<ReactList
 						itemRenderer={this.renderItem}
-						length={list.length}
+						length={this.listLength}
 						type="uniform"
 					/>
 				</div>
@@ -86,7 +83,8 @@ const mapStateToProps = state => ({
 
 // Making the login state piece we've got and our actions
 // available in this.props within this component (Dashboard)
-const connected = connect(mapStateToProps, { createEvent })(Dashboard);
+// const connected = connect(mapStateToProps, { createEvent })(Dashboard);
+const connected = connect(mapStateToProps)(Dashboard);
 
 // In our state this form will be available in 'form.login'
 // const formed = reduxForm({
