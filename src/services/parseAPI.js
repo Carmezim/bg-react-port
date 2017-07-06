@@ -99,16 +99,21 @@ class ParseService {
 	//------------------------------------DATA RELATED METHODS -------------------------
 	loadEvents() {
 		const event = new Parse.Query(this.EventClass);
+		const resultArr = [];
 
-		// const name = event.get("name");
-		// const title = event.get("title");
-		// const startDate = event.get("startDate");
-		// const startTime = event.get("startTime");
-		// const price = event.get("price");
-		// const order = event.get("order");
-
-		event.find("name").then(result => {
-			console.log(result);
+		event.limit(50);
+		event.select("name", "address", "price", "startDate", "startTime", "order");
+		return event.find({
+			success: results => {
+				results.map(result => {
+					console.log(result.attributes)
+					resultArr.push(result.attributes);
+				});
+				return resultArr;
+			},
+			error: err => {
+				console.error(err);
+			}
 		});
 	}
 }
