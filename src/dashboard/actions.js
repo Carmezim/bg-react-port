@@ -1,27 +1,51 @@
 import {
-	CREATE_EVENT,
-	CREATE_EVENT_SUCCESS,
-	CREATE_ERROR
+	EVENT_CREATING,
+	EVENT_CREATE_SUCCESS,
+	EVENT_CREATE_ERROR,
+	EVENT_REQUESTING,
+	EVENT_REQUEST_SUCCESS,
+	EVENT_REQUEST_ERROR
 } from "./actionTypes";
 
-export const createEvent = (client, eventToCreate) => {
+export const eventCreate = (client, event) => {
 	return {
 		type: CREATE_EVENT,
 		client,
-		eventToCreate
+		event
 	};
 };
 
-export const eventCreateSuccess = eventToCreate => {
+export const eventCreateSuccess = event => {
 	return {
-		type: CREATE_EVENT_SUCCESS,
-		eventToCreate
+		type: EVENT_CREATE_SUCCESS,
+		event
 	};
 };
 
 export const eventCreateError = error => {
 	return {
-		type: CREATE_ERROR,
+		type: EVENT_CREATE_ERROR,
 		error
+	};
+};
+
+export const eventRequest = client => {
+	return {
+		type: EVEMT_REQUESTING,
+		client
+	};
+};
+
+export const eventRequestSuccess = events => {
+	return {
+		type: EVENT_REQUEST_SUCCESS,
+		events
+	};
+};
+
+export const eventRequestError = client => {
+	return {
+		type: EVENT_REQUEST_ERROR,
+		client
 	};
 };
