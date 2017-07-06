@@ -4,12 +4,11 @@ import PropTypes from "prop-types";
 import ReactList from "react-list";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import ParseService from "../services/parseAPI";
 
 // Import components
 import EventTemplate from "../common/forms/EventForm";
 import Button from "../common/forms/Button";
-import ListItem from "../draggableList";
+import ItemsList from "../draggableList";
 
 class Dashboard extends Component {
 	// prop validation
@@ -32,15 +31,45 @@ class Dashboard extends Component {
 
 	constructor(props) {
 		super(props);
+		let bigList = [
+			{
+				id: 1,
+				text: "Event 1"
+			},
+			{
+				id: 2,
+				text: "Book Event 2 in a cool place"
+			},
+			{
+				id: 3,
+				text: "Awesome Book event 3"
+			},
+			{
+				id: 4,
+				text: "Fun Book Event 4"
+			},
+			{
+				id: 5,
+				text: "Book Event 5"
+			},
+			{
+				id: 6,
+				text: "One More Events 6"
+			},
+			{
+				id: 7,
+				text: "BOOKS BOOKS BOOKS 7"
+			}
+		];
+		this.bigList = bigList;
+		this.renderItem = this.renderItem.bind(this);
 	}
 
 	// Return infinite list item
 	renderItem(index, key) {
-		let names = ParseService.loadEvents();
-		console.log(names)
 		return (
 			<div className="infinite-list-item" key={key}>
-				{names[index]}
+				{this.bigList[index].text}
 			</div>
 		);
 	}
@@ -51,10 +80,9 @@ class Dashboard extends Component {
 			client,
 			dashboard: { list, requesting, successful, messages, errors }
 		} = this.props;
-		let listLength = 100;
 		return (
 			<div className="admin-dashboard">
-				<ListItem />
+				<ItemsList />
 				<h1>Dashboard</h1>
 				<div className="create-event-form">
 					<div>
@@ -66,7 +94,7 @@ class Dashboard extends Component {
 				<div className="intinite-list">
 					<ReactList
 						itemRenderer={this.renderItem}
-						length={this.listLength}
+						length={this.bigList.length}
 						type="uniform"
 					/>
 				</div>
