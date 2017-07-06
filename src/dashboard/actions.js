@@ -31,7 +31,7 @@ export const eventCreateError = error => {
 
 export const eventRequest = client => {
 	return {
-		type: EVEMT_REQUESTING,
+		type: EVENT_REQUESTING,
 		client
 	};
 };
