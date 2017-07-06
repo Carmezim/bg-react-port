@@ -96,7 +96,7 @@ class ParseService {
 		);
 	}
 
-	//------------------------------------DATA RELATED METHODS -------------------------
+	//---------------------------DATA RELATED METHODS--------------------------
 	loadEvents() {
 		const event = new Parse.Query(this.EventClass);
 		const resultArr = [];
@@ -113,6 +113,25 @@ class ParseService {
 			},
 			error: err => {
 				console.error(err);
+			}
+		});
+	}
+
+	createEvent(eventData) {
+		const event = new Parse.Query(this.EventClass);
+
+		event.set("name", eventDAta.name);
+		event.set("address", eventData.address);
+		event.set("price", eventData.price);
+		event.set("startDate", eventData.startDate);
+		event.set("startTime", eventData.startTime);
+		event.set("order", eventData.order);
+		event.save(null, {
+			success: data => {
+				console.log("Successfuly saved submitted event!");
+			},
+			error: error => {
+				console.error(`Failed to save submitted event due to ${error}!`);
 			}
 		});
 	}
