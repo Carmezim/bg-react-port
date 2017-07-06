@@ -120,7 +120,7 @@ class ParseService {
 	createEvent(eventData) {
 		const event = new Parse.Query(this.EventClass);
 
-		event.set("name", eventDAta.name);
+		event.set("name", eventData.name);
 		event.set("address", eventData.address);
 		event.set("price", eventData.price);
 		event.set("startDate", eventData.startDate);
