@@ -44,9 +44,10 @@ class Login extends Component {
 				<form className="login-form" onSubmit={handleSubmit(this.submit)}>
 					<fieldset>
 						<legend>Admin Console</legend>
-
 						<div className="icon">
-							<label className="cd-label" htmlFor="username">Username</label>
+							<label className="cd-label" htmlFor="username">
+								Username
+							</label>
 							<Field
 								name="username"
 								type="text"
@@ -57,7 +58,9 @@ class Login extends Component {
 						</div>
 
 						<div className="icon">
-							<label className="cd-label" htmlFor="password">Password</label>
+							<label className="cd-label" htmlFor="password">
+								Password
+							</label>
 							<Field
 								name="password"
 								type="password"
@@ -74,7 +77,7 @@ class Login extends Component {
 					{!requesting &&
 						!!errors.length &&
 						<Errors className="error-message" errors={errors} />}
-					{!requesting && 
+					{!requesting &&
 						!!messages.length &&
 						<Messages className="info-message" messages={messages} />}
 					{requesting && <div>Logging in...</div>}
