@@ -9,7 +9,7 @@ import {
 
 export const eventCreate = (client, event) => {
 	return {
-		type: CREATE_EVENT,
+		type: EVENT_CREATING,
 		client,
 		event
 	};
