@@ -1,8 +1,11 @@
 import Immutable from "seamless-immutable";
 import {
-	CREATE_EVENT,
-	CREATE_EVENT_SUCCESS,
-	CREATE_ERROR
+	EVENT_CREATING,
+	EVENT_CREATE_SUCCESS,
+	EVENT_CREATE_ERROR,
+	EVENT_REQUESTING,
+	EVENT_REQUEST_SUCCESS,
+	EVENT_REQUEST_ERROR
 } from "./actionTypes";
 
 const initialState = Immutable({
@@ -15,14 +18,14 @@ const initialState = Immutable({
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
-		case CREATE_EVENT:
+		case EVENT_CREATING:
 			return {
 				...state,
 				requesting: true,
 				successful: false,
 				messages: [
 					{
-						body: `event being created`,
+						body: `Creating ${action.event} event...`,
 						time: new Date()
 					}
 				],
@@ -31,23 +34,64 @@ const reducer = (state = initialState, action) => {
 
 		// On success include the new event into the list
 		// this list will render later.
-		case CREATE_EVENT_SUCCESS:
+		case EVENT_CREATE_SUCCESS:
 			return {
 				list: state.list.concat([action.event]),
 				requesting: false,
 				successful: true,
 				messages: [
 					{
-						body: `event successfully created`,
+						body: `Event ${action.event} successfully created`,
 						time: new Date()
 					}
 				],
 				errors: []
 			};
 
-		case CREATE_ERROR:
+		case EVENT_CREATE_ERROR:
 			return {
 				...state,
+				requesting: false,
+				successful: false,
+				messages: [],
+				errors: state.errors.concat([
+					{
+						body: action.error.toString(),
+						time: new Date()
+					}
+				])
+			};
+
+		case EVENT_REQUESTING:
+			return {
+				...state,
+				requesting: true,
+				successful: false,
+				messages: [
+					{
+						body: `Fetching events...`,
+						time: new Date()
+					}
+				],
+				errors: []
+			};
+
+		case EVENT_REQUEST_SUCCESS:
+			return {
+				list: action.events,
+				requesting: false,
+				successful: true,
+				messages: [
+					{
+						body: `Events successfully fetched`,
+						time: new Date()
+					}
+				],
+				errors: []
+			};
+
+		case EVENT_REQUEST_ERROR:
+			return {
 				requesting: false,
 				successful: false,
 				messages: [],
