@@ -6,7 +6,7 @@ import { Field, reduxForm } from "redux-form";
 import "./EventForm.css";
 
 // Validation for form fields
-export const nameRequired = value => (value ? undefined : "Name Required");
+export const nameRequired = value => (value ? undefined : "Field Required");
 
 export const renderNameInput = ({ input, type, meta: { touched, error } }) =>
 	<div>
@@ -22,7 +22,7 @@ export const renderNameInput = ({ input, type, meta: { touched, error } }) =>
 		{touched &&
 			error &&
 			<div
-				style={{ color: "#cc7a6f", margin: "-10px 0 15px", fontSize: "0.7rem" }}
+				style={{ color: "#cc7a6f", margin: "-10px 0 15px", fontSize: "1rem" }}
 			>
 				{error}
 			</div>}
@@ -123,6 +123,13 @@ const EventTemplate = props => {
 					className="banner-title"
 					component="input"
 					validate={nameRequired}
+				/>
+				<div className="event-book">The Book for this event</div>
+				<Field
+					name="pre-order"
+					id="pre-order"
+					component="input"
+					type="checkbox"
 				/>
 				<button disabled={invalid} type="submit">
 					Create

@@ -1,9 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Field } from "redux-form";
 
 // Generic form component using Redux Form (in progress, can be extended to generate form groups)
-
 // Usage:
 // Provide the arguments as the example below
 // and pass them to the Form component props when invoking
