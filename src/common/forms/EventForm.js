@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Field, reduxForm } from "redux-form";
 
+// import style
+import "./EventForm.css";
+
 // Validation for form fields
 export const nameRequired = value => (value ? undefined : "Name Required");
 
@@ -29,9 +32,9 @@ const EventTemplate = props => {
 	const { handleSubmit, invalid } = props;
 
 	return (
-		<div>
+		<div className="event-form">
 			<form onSubmit={handleSubmit}>
-				<label htmlFor="Title">Title</label>
+				<label className="form-label" htmlFor="Title">Title</label>
 				<Field
 					name="title"
 					type="text"
@@ -40,7 +43,7 @@ const EventTemplate = props => {
 					component={renderNameInput}
 					validate={nameRequired}
 				/>
-				<label htmlFor="author-name">Author Name</label>
+				<label className="form-label" htmlFor="author-name">Author Name</label>
 				<Field
 					name="name"
 					type="text"
@@ -49,7 +52,7 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label htmlFor="venue">Venue</label>
+				<label className="form-label" htmlFor="venue">Venue</label>
 				<Field
 					name="venue"
 					type="text"
@@ -58,7 +61,7 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label htmlFor="address">Address</label>
+				<label className="form-label" htmlFor="address">Address</label>
 				<Field
 					name="address"
 					type="text"
@@ -67,7 +70,7 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label htmlFor="postcode">Postcode</label>
+				<label className="form-label" htmlFor="postcode">Postcode</label>
 				<Field
 					name="postCode"
 					type="number"
@@ -76,7 +79,7 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label htmlFor="price">Price</label>
+				<label className="form-label" htmlFor="price">Price</label>
 				<Field
 					name="price"
 					type="number"
@@ -85,7 +88,7 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label htmlFor="event-url">Event URL</label>
+				<label className="form-label" htmlFor="event-url">Event URL</label>
 				<Field
 					name="url"
 					type="text"
@@ -94,7 +97,7 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label htmlFor="description">Description</label>
+				<label className="form-label" htmlFor="description">Description</label>
 				<Field
 					name="description"
 					type="text"
@@ -103,7 +106,7 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label htmlFor="more-about-event">More About This Event</label>
+				<label className="form-label" htmlFor="more-about-event">More About This Event</label>
 				<Field
 					name="aboutEvent"
 					type="text"
@@ -112,7 +115,7 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label htmlFor="banner-title">Banner Title</label>
+				<label className="form-label" htmlFor="banner-title">Banner Title</label>
 				<Field
 					name="banner"
 					type="text"
