@@ -118,16 +118,20 @@ class ParseService {
 	}
 
 	createEvent(eventData) {
+		console.log("event data service API", eventData);
 		const event = new Parse.Query(this.EventClass);
 
 		event.set("name", eventData.name);
 		event.set("address", eventData.address);
 		event.set("price", eventData.price);
-		event.set("startDate", eventData.startDate);
-		event.set("startTime", eventData.startTime);
-		event.set("order", eventData.order);
+		event.set("venue", eventData.venue);
+		event.set("postCode", eventData.postCode);
+		event.set("description", eventData.description);
+		event.set("aboutEvent", eventData.aboutEvent);
+		event.set("banner", eventData.banner);
+		event.set("title", eventData.title);
 		event.save(null, {
-			success: data => {
+			success: event => {
 				console.log("Successfuly saved submitted event!");
 			},
 			error: error => {
