@@ -4,17 +4,19 @@ import PropTypes from "prop-types";
 import ReactList from "react-list";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { getFormValues, reset } from "redux-form";
 
-// Import components
+// import components
 import EventTemplate from "../common/forms/EventForm";
 import Button from "../common/forms/Button";
 import ItemsList from "../draggableList";
 
+// import actions
+import { eventCreate, eventRequest } from "./actions";
+
 class Dashboard extends Component {
 	// prop validation
 	static propTypes = {
-		// handleSubmit: PropTypes.func.isRequired,
-		// invalid: PropTypes.bool.isRequired,
 		client: PropTypes.shape({
 			token: PropTypes.string // add required
 		}),
@@ -25,79 +27,47 @@ class Dashboard extends Component {
 			messages: PropTypes.array,
 			errors: PropTypes.array
 		}).isRequired,
-		// createEvent: PropTypes.func.isRequired,
-		// reset: PropTypes.func.isRequired
+		eventCreate: PropTypes.func.isRequired,
+		eventRequest: PropTypes.func.isRequired,
+		reset: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
-		let bigList = [
-			{
-				id: 1,
-				text: "Event 1"
-			},
-			{
-				id: 2,
-				text: "Book Event 2 in a cool place"
-			},
-			{
-				id: 3,
-				text: "Awesome Book event 3"
-			},
-			{
-				id: 4,
-				text: "Fun Book Event 4"
-			},
-			{
-				id: 5,
-				text: "Book Event 5"
-			},
-			{
-				id: 6,
-				text: "One More Events 6"
-			},
-			{
-				id: 7,
-				text: "BOOKS BOOKS BOOKS 7"
-			}
-		];
-		this.bigList = bigList;
-		this.renderItem = this.renderItem.bind(this);
+
+	// this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	// Return infinite list item
-	renderItem(index, key) {
-		return (
-			<div className="infinite-list-item" key={key}>
-				{this.bigList[index].text}
-			</div>
-		);
-	}
+	retrieveEvents = () => {
+		const { client, eventRequest } = this.props;
+		if (client && client.token) return eventRequest(client);
+	};
+
+	handleSubmit = event => {
+		const { eventCreate, reset } = this.props;
+		// call to our widgetCreate action.
+		eventCreate(event);
+		// reset the form upon submit.
+		reset("eventForm");
+	};
 
 	render() {
 		const {
-			invalid,
 			client,
 			dashboard: { list, requesting, successful, messages, errors }
 		} = this.props;
+
 		return (
 			<div className="admin-dashboard">
 				<ItemsList />
 				<h1>Dashboard</h1>
 				<div className="create-event-form">
 					<div>
-						<EventTemplate invalid={invalid} />
-						<Button />
+						<EventTemplate ref="eventForm" onSubmit={this.handleSubmit} />
 					</div>
 					<hr />
 				</div>
-				<div className="intinite-list">
-					<ReactList
-						itemRenderer={this.renderItem}
-						length={this.bigList.length}
-						type="uniform"
-					/>
-				</div>
+				<div className="intinite-list">infinite list will go here</div>
 			</div>
 		);
 	}
@@ -106,25 +76,16 @@ class Dashboard extends Component {
 // Getting only the piece of state we need for this component from the global state
 const mapStateToProps = state => ({
 	client: state.client,
-	dashboard: state.dashboard
+	dashboard: state.dashboard,
 });
 
 // Making the login state piece we've got and our actions
 // available in this.props within this component (Dashboard)
 // const connected = connect(mapStateToProps, { createEvent })(Dashboard);
-const connected = connect(mapStateToProps)(Dashboard);
+const connected = connect(mapStateToProps, {
+	reset,
+	eventCreate,
+	eventRequest
+})(Dashboard);
 
-// In our state this form will be available in 'form.login'
-// const formed = reduxForm({
-// 	form: "dashboard"
-// })(connected);
-
-// <Link
-// 	to={{
-// 		pathname: "/addevent",
-// 		submit: handleSubmit(this.submit)
-// 	}}
-// >
-// 	Add Event
-// </Link>
 export default connected;

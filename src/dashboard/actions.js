@@ -7,10 +7,9 @@ import {
 	EVENT_REQUEST_ERROR
 } from "./actionTypes";
 
-export const eventCreate = (client, event) => {
+export const eventCreate = event => {
 	return {
 		type: EVENT_CREATING,
-		client,
 		event
 	};
 };
