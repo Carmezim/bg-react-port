@@ -1,9 +1,10 @@
-import { createEvent } from "../../dashboard/actions";
+import { eventCreate } from "../../dashboard/actions";
+import { reset } from "redux-form";
 
 const submit = values => {
 	const { createBookEvent, client, reset } = values;
 
-	createEvent(client, createBookEvent);
+	eventCreate(client, createBookEvent);
 
 	reset();
 };

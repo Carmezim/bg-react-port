@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Field, reduxForm } from "redux-form";
-import submit from "./submit";
 
 // Validation for form fields
 export const nameRequired = value => (value ? undefined : "Name Required");
 
-//
 export const renderNameInput = ({ input, type, meta: { touched, error } }) =>
 	<div>
 		{/* Spread RF's input properties onto our input */}
@@ -44,7 +42,7 @@ const EventTemplate = props => {
 				/>
 				<label htmlFor="author-name">Author Name</label>
 				<Field
-					name="author-name"
+					name="name"
 					type="text"
 					id="author-name"
 					className="author-name"
@@ -71,7 +69,7 @@ const EventTemplate = props => {
 				/>
 				<label htmlFor="postcode">Postcode</label>
 				<Field
-					name="postcode"
+					name="postCode"
 					type="number"
 					id="postcode"
 					className="postcode"
@@ -89,7 +87,7 @@ const EventTemplate = props => {
 				/>
 				<label htmlFor="event-url">Event URL</label>
 				<Field
-					name="event-url"
+					name="url"
 					type="text"
 					id="event-url"
 					className="event-url"
@@ -107,7 +105,7 @@ const EventTemplate = props => {
 				/>
 				<label htmlFor="more-about-event">More About This Event</label>
 				<Field
-					name="more-about-event"
+					name="aboutEvent"
 					type="text"
 					id="more-about-event"
 					className="more-about-event"
@@ -116,25 +114,27 @@ const EventTemplate = props => {
 				/>
 				<label htmlFor="banner-title">Banner Title</label>
 				<Field
-					name="banner-title"
+					name="banner"
 					type="text"
 					id="banner-title"
 					className="banner-title"
 					component="input"
 					validate={nameRequired}
 				/>
+				<button disabled={invalid} type="submit">
+					Create
+				</button>
 			</form>
 		</div>
 	);
 };
 
 EventTemplate.propTypes = {
-	handleSubmit: PropTypes.func,
-	invalid: PropTypes.bool
+	handleSubmit: PropTypes.func.isRequired
 };
 
-// submit function must be passed to onSubmit
+// Connect our form named 'EventTemplate' (Redux Form)
+// to EventTemplate component
 export default reduxForm({
-	form: "EventTemplate",
-	onSubmit: submit
+	form: "eventForm"
 })(EventTemplate);
