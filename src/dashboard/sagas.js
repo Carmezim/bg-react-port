@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, takeLatest, all } from "redux-saga/effects";
 import ParseService from "../services/parseAPI";
 
 import { EVENT_CREATING, EVENT_REQUESTING } from "./actionTypes.js";
@@ -42,10 +42,10 @@ function* eventRequestFlow(action) {
 }
 
 function* dashboardWatcher() {
-	yield [
+	yield all([
 		takeLatest(EVENT_CREATING, eventCreateFlow),
 		takeLatest(EVENT_REQUESTING, eventRequestFlow)
-	];
+	]);
 }
 
 export default dashboardWatcher;
