@@ -1,9 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Field, reduxForm } from "redux-form";
+import { connect } from "react-redux";
+import { Field, reduxForm, formValueSelector } from "redux-form";
+import flow from "lodash/flow";
+
+// import components
+import Checkbox from "../../common/forms/Checkbox";
 
 // import style
-import "./EventForm.css";
+// import "./EventForm.css";
+
+// a selector is created with 'formValuesSelector' API from redux-form
+// to enable values from the form to ve read
+const selector = formValueSelector("eventForm");
 
 // Validation for form fields
 export const nameRequired = value => (value ? undefined : "Field Required");
@@ -29,12 +38,14 @@ export const renderNameInput = ({ input, type, meta: { touched, error } }) =>
 	</div>;
 
 const EventTemplate = props => {
-	const { handleSubmit, invalid } = props;
+	const { handleSubmit, invalid, hasOrderValue } = props;
 
 	return (
 		<div className="event-form">
 			<form onSubmit={handleSubmit}>
-				<label className="form-label" htmlFor="Title">Title</label>
+				<label className="form-label" htmlFor="Title">
+					Title
+				</label>
 				<Field
 					name="title"
 					type="text"
@@ -43,7 +54,9 @@ const EventTemplate = props => {
 					component={renderNameInput}
 					validate={nameRequired}
 				/>
-				<label className="form-label" htmlFor="author-name">Author Name</label>
+				<label className="form-label" htmlFor="author-name">
+					Author Name
+				</label>
 				<Field
 					name="name"
 					type="text"
@@ -52,7 +65,9 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label className="form-label" htmlFor="venue">Venue</label>
+				<label className="form-label" htmlFor="venue">
+					Venue
+				</label>
 				<Field
 					name="venue"
 					type="text"
@@ -61,7 +76,9 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label className="form-label" htmlFor="address">Address</label>
+				<label className="form-label" htmlFor="address">
+					Address
+				</label>
 				<Field
 					name="address"
 					type="text"
@@ -70,7 +87,9 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label className="form-label" htmlFor="postcode">Postcode</label>
+				<label className="form-label" htmlFor="postcode">
+					Postcode
+				</label>
 				<Field
 					name="postCode"
 					type="number"
@@ -79,7 +98,9 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label className="form-label" htmlFor="price">Price</label>
+				<label className="form-label" htmlFor="price">
+					Price
+				</label>
 				<Field
 					name="price"
 					type="number"
@@ -88,7 +109,9 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label className="form-label" htmlFor="event-url">Event URL</label>
+				<label className="form-label" htmlFor="event-url">
+					Event URL
+				</label>
 				<Field
 					name="url"
 					type="text"
@@ -97,7 +120,9 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label className="form-label" htmlFor="description">Description</label>
+				<label className="form-label" htmlFor="description">
+					Description
+				</label>
 				<Field
 					name="description"
 					type="text"
@@ -106,7 +131,9 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label className="form-label" htmlFor="more-about-event">More About This Event</label>
+				<label className="form-label" htmlFor="more-about-event">
+					More About This Event
+				</label>
 				<Field
 					name="aboutEvent"
 					type="text"
@@ -115,7 +142,9 @@ const EventTemplate = props => {
 					component="input"
 					validate={nameRequired}
 				/>
-				<label className="form-label" htmlFor="banner-title">Banner Title</label>
+				<label className="form-label" htmlFor="banner-title">
+					Banner Title
+				</label>
 				<Field
 					name="banner"
 					type="text"
@@ -125,12 +154,15 @@ const EventTemplate = props => {
 					validate={nameRequired}
 				/>
 				<div className="event-book">The Book for this event</div>
+				<label className="form-label">Pre order the book for this event</label>
 				<Field
-					name="pre-order"
-					id="pre-order"
-					component="input"
+					name="hasOrder"
 					type="checkbox"
+					id="book-checkbox"
+					className="admin-checkbox"
+					component="input"
 				/>
+				{!!hasOrderValue && <Checkbox validate={nameRequired} />}
 				<button disabled={invalid} type="submit">
 					Create
 				</button>
@@ -143,8 +175,15 @@ EventTemplate.propTypes = {
 	handleSubmit: PropTypes.func.isRequired
 };
 
-// Connect our form named 'EventTemplate' (Redux Form)
-// to EventTemplate component
-export default reduxForm({
-	form: "eventForm"
-})(EventTemplate);
+export default flow(
+	// Connect our form named 'EventTemplate' (Redux Form)
+	// to EventTemplate component
+	reduxForm({
+		form: "eventForm"
+	}),
+	// using connect to read form values, in this case 'hasOrder' checkbox
+	connect(state => {
+		const hasOrderValue = selector(state, "hasOrder");
+		return { hasOrderValue };
+	})
+)(EventTemplate);

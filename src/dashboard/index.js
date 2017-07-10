@@ -8,7 +8,6 @@ import { getFormValues, reset } from "redux-form";
 
 // import components
 import EventTemplate from "../common/forms/EventForm";
-import Button from "../common/forms/Button";
 import ItemsList from "../draggableList";
 
 // import actions
@@ -34,15 +33,15 @@ class Dashboard extends Component {
 
 	constructor(props) {
 		super(props);
-
-	// this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
+	// retrieve events saved on database
 	retrieveEvents = () => {
 		const { client, eventRequest } = this.props;
 		if (client && client.token) return eventRequest(client);
 	};
 
+	// submit event form data
 	handleSubmit = event => {
 		const { eventCreate, reset } = this.props;
 		// call to our widgetCreate action.
