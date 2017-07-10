@@ -32,26 +32,25 @@ class ParseService {
 		user.set("password", password);
 
 		user.signUp(null, {
-			success: function(user) {
+			success: user => {
 				console.log("New user successfully created");
 			},
-			error: function(user, error) {
+			error: (user, error) => {
 				alert(`Error: ${error.code} ${error.message}`);
 			}
 		});
 	}
 
 	// Log user in returning session token on a successful call.
-	login(username, password) {
+	async login(username, password) {
 		return Parse.User.logIn(username, password, {
-			success: function(user) {
+			success: user => {
 				console.log(`Successfully logged user ${username}`);
 			},
-			error: function(user, error) {
+			error: (user, error) => {
 				console.error(
 					`Parse failed to login due to: ${error.code} ${error.message}`
 				);
-				// return false;
 			}
 		});
 	}
@@ -101,12 +100,27 @@ class ParseService {
 		const event = new Parse.Query(this.EventClass);
 		const resultArr = [];
 
-		event.limit(50);
-		event.select("name", "address", "price", "startDate", "startTime", "order");
+		event.select(
+			"name",
+			"title",
+			"address",
+			"price",
+			"startDate",
+			"startTime",
+			"order"
+		);
+		event.exists(
+			"name",
+			"objectId",
+			"price",
+			"startDate",
+			"startTime",
+			"title"
+		);
+		event.limit(5);
 		return event.find({
 			success: results => {
 				results.map(result => {
-					console.log(result.attributes)
 					resultArr.push(result.attributes);
 				});
 				return resultArr;

@@ -89,7 +89,8 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				itemsList: action.initialList
-			}
+			};
+
 		default:
 			return state;
 	}

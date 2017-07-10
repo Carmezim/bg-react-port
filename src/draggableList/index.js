@@ -11,7 +11,7 @@ import Item from "../common/draganddrop/Item";
 // import action
 import { moveItemRequest } from "./actions";
 
-class ListItem extends Component {
+class ItemsList extends Component {
 	constructor(props) {
 		super(props);
 		this.moveItem = this.moveItem.bind(this);
@@ -46,14 +46,23 @@ class ListItem extends Component {
 
 		return (
 			<div className="draggable-list">
-				{itemsList.map((item, key) =>
-					<Item
-						key={item.id}
-						index={key}
-						id={item.id}
-						item={item.text}
-						moveItem={this.moveItem}
-					/>
+				{itemsList.map((item, key) => {
+					const { name, title, objectId, price, startDate, startTime } = item;
+					return (
+						<div>
+							<Item
+								key={objectId.toString()}
+								index={key}
+								id={objectId.toString()}
+								name={name ? name : ""}  // until I figure why parse 'exists' is not filtering
+								title={title ? title : ""}
+								price={price ? price : ""}
+								date={startDate ? startDate.toString() : ""}
+								time={startTime ? startTime.toString() : ""}
+								moveItem={this.moveItem}
+							/>
+						</div>
+					)}
 				)}
 				{!!errors && console.error(errors.error)}
 			</div>
@@ -68,4 +77,4 @@ const mapStateToProps = state => ({
 export default flow(
 	DragDropContext(HTML5Backend),
 	connect(mapStateToProps, { moveItemRequest })
-)(ListItem);
+)(ItemsList);

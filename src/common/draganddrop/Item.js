@@ -96,13 +96,21 @@ class Item extends Component {
 		index: PropTypes.number.isRequired,
 		isDragging: PropTypes.bool.isRequired,
 		id: PropTypes.any.isRequired,
-		item: PropTypes.string.isRequired,
-		moveItem: PropTypes.func.isRequired
+		moveItem: PropTypes.func.isRequired,
+		name: PropTypes.string.isRequired,
+		title: PropTypes.string.isRequired,
+		date: PropTypes.string.isRequired,
+		price: PropTypes.string.isRequired,
+		time: PropTypes.string
 	};
 
 	render() {
 		const {
-			item,
+			date,
+			name,
+			price,
+			time,
+			title,
 			isDragging,
 			connectDragSource,
 			connectDropTarget
@@ -113,7 +121,35 @@ class Item extends Component {
 		return connectDragSource(
 			connectDropTarget(
 				<div style={{ ...style, opacity }} className="draggable-list-item">
-					{item}
+					<div className="panel-content">
+						<div className="pan-col pan-title">
+							<h3>
+								<strong>
+									{name}
+								</strong>
+							</h3>
+						</div>
+						<div className="pan-col col-same pan-event-title">
+							<p>
+								{title}
+							</p>
+						</div>
+
+						<div className="pan-col pan-date">
+							<p>
+								{date}
+							</p>
+						</div>
+
+						<div className="pan-col col-same pan-price">
+							<p>
+								{price}
+							</p>
+						</div>
+					</div>
+					<div className="pan-col col-same">
+						{time}
+					</div>
 				</div>
 			)
 		);

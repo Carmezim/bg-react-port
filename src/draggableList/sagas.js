@@ -1,14 +1,22 @@
 import { call, fork, put, take } from "redux-saga/effects";
 import { takeEvery } from "redux-saga";
+import ParseService from "../services/parseAPI";
 
 // import DnD actionTypes
 import {
 	MOVE_ITEM_REQUEST,
 	MOVE_ITEM_SUCCESS,
-	MOVE_ITEM_ERROR
+	MOVE_ITEM_ERROR,
+	INITIALIZE_LIST
 } from "./actionTypes";
+
 // // import action
 // import { moveItemRequest } from "./actions";
+
+// Fetch current list to populate list when initializing
+function* fetchList() {
+	return yield ParseService.loadEvents();
+}
 
 // as we cannot mutate our data we will use those helper
 // function to achieve deletion and insertion (to replace splice)
@@ -48,8 +56,15 @@ function* dndWatcher() {
 	while (true) {
 		// retrieving DnD move request action data
 		// we here are watching whenever an item is dragged
-		// once it happens we take all the data sent on the action 
+		// once it happens we take all the data sent on the action
 		// fired from our view
+
+		// fetch the current list data
+		const initialList = yield call(fetchList);
+
+		// populate list state with fetched data
+		yield put({ type: INITIALIZE_LIST, initialList });
+
 		const { itemsList, dragIndex, hoverIndex, dragItem } = yield take(
 			MOVE_ITEM_REQUEST
 		);
