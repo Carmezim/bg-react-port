@@ -4,39 +4,40 @@ import Immutable from "seamless-immutable";
 import {
 	MOVE_ITEM_REQUEST,
 	MOVE_ITEM_SUCCESS,
-	MOVE_ITEM_ERROR
+	MOVE_ITEM_ERROR,
+	INITIALIZE_LIST
 } from "./actionTypes";
 
 const initialState = Immutable({
 	itemsList: [
-		{
-			id: 1,
-			text: "Event 1"
-		},
-		{
-			id: 2,
-			text: "Book Event 2 in a cool place"
-		},
-		{
-			id: 3,
-			text: "Awesome Book event 3"
-		},
-		{
-			id: 4,
-			text: "Fun Book Event 4"
-		},
-		{
-			id: 5,
-			text: "Book Event 5"
-		},
-		{
-			id: 6,
-			text: "One More Events 6"
-		},
-		{
-			id: 7,
-			text: "BOOKS BOOKS BOOKS 7"
-		}
+		// {
+		// 	id: 1,
+		// 	text: "Event 1"
+		// },
+		// {
+		// 	id: 2,
+		// 	text: "Book Event 2 in a cool place"
+		// },
+		// {
+		// 	id: 3,
+		// 	text: "Awesome Book event 3"
+		// },
+		// {
+		// 	id: 4,
+		// 	text: "Fun Book Event 4"
+		// },
+		// {
+		// 	id: 5,
+		// 	text: "Book Event 5"
+		// },
+		// {
+		// 	id: 6,
+		// 	text: "One More Events 6"
+		// },
+		// {
+		// 	id: 7,
+		// 	text: "BOOKS BOOKS BOOKS 7"
+		// }
 	],
 	requesting: false,
 	messages: [],
@@ -83,7 +84,12 @@ const reducer = (state = initialState, action) => {
 					}
 				])
 			};
-
+		// populate list with current stored data
+		case INITIALIZE_LIST:
+			return {
+				...state,
+				itemsList: action.initialList
+			}
 		default:
 			return state;
 	}
