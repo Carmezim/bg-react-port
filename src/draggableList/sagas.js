@@ -1,5 +1,4 @@
-import { call, fork, put, take } from "redux-saga/effects";
-import { takeEvery } from "redux-saga";
+import { call, fork, put, take, takeEvery } from "redux-saga/effects";
 import ParseService from "../services/parseAPI";
 
 // import DnD actionTypes
@@ -7,15 +6,17 @@ import {
 	MOVE_ITEM_REQUEST,
 	MOVE_ITEM_SUCCESS,
 	MOVE_ITEM_ERROR,
-	INITIALIZE_LIST
+	FETCH_LIST,
+	FETCH_LIST_SUCCESS,
+	FETCH_LIST_ERROR
 } from "./actionTypes";
 
 // // import action
 // import { moveItemRequest } from "./actions";
 
 // Fetch current list to populate list when initializing
-function* fetchList() {
-	return yield ParseService.loadEvents();
+function fetchList() {
+	return ParseService.loadEvents();
 }
 
 // as we cannot mutate our data we will use those helper
@@ -51,19 +52,31 @@ function* moveItem(reorderedList) {
 	}
 }
 
+function* fetchListFlow() {
+	try {
+		// fetch list with parse call
+		const initialList = yield call(fetchList);
+
+		yield put({ type: FETCH_LIST, initialList });
+		// populate list state with fetched data and
+		// inform Redux fetching action completed successfully
+		yield put({ type: FETCH_LIST_SUCCESS });
+
+	} catch (error) {
+		yield put({ type: FETCH_LIST_ERROR, error });
+	}
+}
+
 // watch drag and drop actions
 function* dndWatcher() {
 	while (true) {
-		// retrieving DnD move request action data
-		// we here are watching whenever an item is dragged
-		// once it happens we take all the data sent on the action
-		// fired from our view
+		// fetch list on database and update the list
+		// state calling 'fetchListFlow'
+		// then handle retrieving DnD move actions requests data
+		// by watching whenever an item is dragged
+		// and taking all the data sent on the action when it happens
 
-		// fetch the current list data
-		const initialList = yield call(fetchList);
-
-		// populate list state with fetched data
-		yield put({ type: INITIALIZE_LIST, initialList });
+		yield takeEvery(fetchListFlow);
 
 		const { itemsList, dragIndex, hoverIndex, dragItem } = yield take(
 			MOVE_ITEM_REQUEST

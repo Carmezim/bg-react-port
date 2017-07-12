@@ -47,18 +47,19 @@ class ItemsList extends Component {
 		return (
 			<div className="draggable-list">
 				{itemsList.map((item, key) => {
-					const { name, title, objectId, price, startDate, startTime } = item;
+					console.log(itemsList)
+					const { name, title, price, startDate, startTime } = item;
 					return (
-						<div>
+						<div key={key}>
 							<Item
-								key={objectId.toString()}
+								key={item.id}
 								index={key}
-								id={objectId.toString()}
+								id={item.id}
 								name={name ? name : ""}  // until I figure why parse 'exists' is not filtering
 								title={title ? title : ""}
 								price={price ? price : ""}
-								date={startDate ? startDate.toString() : ""}
-								time={startTime ? startTime.toString() : ""}
+								date={startDate ? startDate.iso.toString() : ""}
+								time={startTime ? startTime : ""}
 								moveItem={this.moveItem}
 							/>
 						</div>

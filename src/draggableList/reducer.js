@@ -5,40 +5,15 @@ import {
 	MOVE_ITEM_REQUEST,
 	MOVE_ITEM_SUCCESS,
 	MOVE_ITEM_ERROR,
-	INITIALIZE_LIST
+	FETCH_LIST,
+	FETCH_LIST_SUCCESS,
+	FETCH_LIST_ERROR
+
 } from "./actionTypes";
 
 const initialState = Immutable({
-	itemsList: [
-		// {
-		// 	id: 1,
-		// 	text: "Event 1"
-		// },
-		// {
-		// 	id: 2,
-		// 	text: "Book Event 2 in a cool place"
-		// },
-		// {
-		// 	id: 3,
-		// 	text: "Awesome Book event 3"
-		// },
-		// {
-		// 	id: 4,
-		// 	text: "Fun Book Event 4"
-		// },
-		// {
-		// 	id: 5,
-		// 	text: "Book Event 5"
-		// },
-		// {
-		// 	id: 6,
-		// 	text: "One More Events 6"
-		// },
-		// {
-		// 	id: 7,
-		// 	text: "BOOKS BOOKS BOOKS 7"
-		// }
-	],
+	itemsList: [],
+	isFetching: false,
 	requesting: false,
 	messages: [],
 	errors: []
@@ -82,13 +57,44 @@ const reducer = (state = initialState, action) => {
 						body: action.error.toString(),
 						time: new Date()
 					}
-				])
+				]),
+				messages: []
 			};
+
 		// populate list with current stored data
-		case INITIALIZE_LIST:
+		case FETCH_LIST:
 			return {
 				...state,
-				itemsList: action.initialList
+				isFetching: true,
+				itemsList: action.initialList,
+				messages: state.messages.concat([
+					{
+						body: "Fetching event list",
+						time: new Date()
+					}
+				])
+			};
+
+		// Once data is successfully fetched the state is updated
+		case FETCH_LIST_SUCCESS:
+			return {
+				...state,
+				isFetching: false,
+				messages: []
+			};
+
+		// handle errors in case the fetch call fails
+		case FETCH_LIST_ERROR:
+			return {
+				...state,
+				isFetching: false,
+				errors: state.errors.concat([
+					{
+						body: action.error.toString(),
+						time: new Date()
+					}
+				]),
+				messages: []
 			};
 
 		default:
