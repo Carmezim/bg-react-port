@@ -97,7 +97,7 @@ class ParseService {
 
 	//---------------------------DATA RELATED METHODS--------------------------
 	loadEvents() {
-		const event = new Parse.Query(this.EventClass);
+		const event = new Parse.Query("Event");
 		const resultArr = [];
 
 		event.select(
@@ -117,12 +117,37 @@ class ParseService {
 			"startTime",
 			"title"
 		);
-		event.limit(5);
-		return event.find({
+		event.ascending("sort_order");
+		event.limit(7);
+		// 'query.find' not filtering based on constraints
+		// maybe related https://github.com/parse-community/parse-server/issues/211
+		return event.find().then({
 			success: results => {
-				results.map(result => {
-					resultArr.push(result.attributes);
-				});
+				console.log("returned list");
+				console.log(results);
+				results.map(event => resultArr.push(event));
+				console.log("cool first 7 items result array: ", resultArr);
+				return resultArr;
+			},
+			error: err => {
+				console.error(err);
+			}
+		});
+	}
+
+	loadFullList() {
+		const event = new Parse.Query(this.EventClass);
+		const resultArr = [];
+
+		event.ascending("sort_order");
+		event.skip(7);
+		event.limit(20);	
+		event.find().then({
+			success: results => {
+				console.log("full list loaded on loadFullList call inside Parse API");
+				console.log(results);
+				results.map(event => resultArr.push(event));
+				console.log("cool full list result array: ", resultArr);
 				return resultArr;
 			},
 			error: err => {
