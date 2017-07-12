@@ -21,6 +21,7 @@ class ItemsList extends Component {
 		moveItemRequest: PropTypes.func,
 		draggable: PropTypes.shape({
 			itemsList: PropTypes.array,
+			isFetching: PropTypes.bool,
 			requesting: PropTypes.bool,
 			messages: PropTypes.array,
 			error: PropTypes.array
@@ -41,27 +42,30 @@ class ItemsList extends Component {
 
 	render() {
 		const {
-			draggable: { itemsList, requesting, messages, errors }
+			draggable: { isFetching, itemsList, requesting, messages, errors }
 		} = this.props;
 
 		return (
 			<div className="draggable-list">
 				{itemsList.map((item, key) => {
 					console.log(itemsList)
-					const { name, title, price, startDate, startTime } = item;
+					const { name, title, objectId, price, startDate, startTime } = item;
+					console.log(item)
 					return (
 						<div key={key}>
-							<Item
-								key={item.id}
-								index={key}
-								id={item.id}
-								name={name ? name : ""}  // until I figure why parse 'exists' is not filtering
-								title={title ? title : ""}
-								price={price ? price : ""}
-								date={startDate ? startDate.iso.toString() : ""}
-								time={startTime ? startTime : ""}
-								moveItem={this.moveItem}
-							/>
+							{itemsList && (
+								<Item
+									key={objectId}
+									index={key}
+									id={objectId}
+									name={name ? name : ""}
+									title={title ? title : ""}
+									price={price ? price : ""}
+									date={startDate ? startDate.iso.toString() : ""}
+									time={startTime ? startTime : ""}
+									moveItem={this.moveItem}
+								/>)}
+							{!!isFetching && !itemsList && <div>Loading events...</div>}
 						</div>
 					)}
 				)}

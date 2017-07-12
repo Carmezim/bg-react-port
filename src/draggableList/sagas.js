@@ -1,4 +1,4 @@
-import { call, fork, put, take, takeEvery } from "redux-saga/effects";
+import { call, fork, put, take, takeEvery, takeLatest } from "redux-saga/effects";
 import ParseService from "../services/parseAPI";
 
 // import DnD actionTypes
@@ -57,13 +57,11 @@ function* fetchListFlow() {
 		// fetch list with parse call
 		const initialList = yield call(fetchList);
 
-		yield put({ type: FETCH_LIST, initialList });
 		// populate list state with fetched data and
 		// inform Redux fetching action completed successfully
-		yield put({ type: FETCH_LIST_SUCCESS });
-
+		yield put({ type: FETCH_LIST_SUCCESS, initialList });
 	} catch (error) {
-		yield put({ type: FETCH_LIST_ERROR, error });
+		yield put({ type: FETCH_LIST_ERROR, errors: error, itemsList: [] });
 	}
 }
 
@@ -76,7 +74,7 @@ function* dndWatcher() {
 		// by watching whenever an item is dragged
 		// and taking all the data sent on the action when it happens
 
-		yield takeEvery(fetchListFlow);
+		yield takeEvery("FETCH_LIST", fetchListFlow);
 
 		const { itemsList, dragIndex, hoverIndex, dragItem } = yield take(
 			MOVE_ITEM_REQUEST

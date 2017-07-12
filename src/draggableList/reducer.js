@@ -66,7 +66,6 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				isFetching: true,
-				itemsList: action.initialList,
 				messages: state.messages.concat([
 					{
 						body: "Fetching event list",
@@ -80,6 +79,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				isFetching: false,
+				itemsList: action.initialList,
 				messages: []
 			};
 
@@ -88,6 +88,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				isFetching: false,
+				itemsList: action.itemsList,
 				errors: state.errors.concat([
 					{
 						body: action.error.toString(),
