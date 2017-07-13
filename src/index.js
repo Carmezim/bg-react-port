@@ -8,6 +8,8 @@ import { Router } from "react-router-dom";
 import history from "./history";
 import registerServiceWorker from "./registerServiceWorker";
 
+import { fetchEvents } from "./draggableList/actions";
+
 // Import parent component
 import App from "./App";
 import "./index.css";
@@ -42,10 +44,13 @@ const store = createStore(
 	IndexReducer,
 	composeSetup(applyMiddleware(sagaMiddleware), autoRehydrate()) // allows redux devtools to watch sagas
 );
-
+store.dispatch(fetchEvents());
 // Begins periodically persisting the store
 // Redux-Persist assists in persists the state on browser refresh
-persistStore(store);
+persistStore(store, { 
+	blacklist: ["draggable"]
+ }
+);
 
 // Begin Index Saga
 sagaMiddleware.run(IndexSagas);
