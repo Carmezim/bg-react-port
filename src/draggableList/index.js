@@ -31,7 +31,7 @@ class ItemsList extends Component {
 	moveItem(dragIndex, hoverIndex) {
 		const { draggable: itemsList } = this.props;
 		const dragItem = itemsList.itemsList[dragIndex];
-
+		console.log("Move Item", itemsList.itemsList)
 		this.props.moveItemRequest(
 			itemsList.itemsList,
 			dragIndex,
@@ -40,35 +40,47 @@ class ItemsList extends Component {
 		);
 	}
 
+	// componentDidMount() {
+	// 	this.props.fetchEvents();
+	// }
+
 	render() {
 		const {
 			draggable: { isFetching, itemsList, requesting, messages, errors }
 		} = this.props;
-
+		console.log(itemsList)
+		console.log(itemsList[0])
 		return (
 			<div className="draggable-list">
-				{itemsList.map((item, key) => {
-					console.log(itemsList)
-					const { name, title, objectId, price, startDate, startTime } = item;
-					console.log(item)
-					return (
-						<div key={key}>
-							{itemsList && (
-								<Item
-									key={objectId}
-									index={key}
-									id={objectId}
-									name={name ? name : ""}
-									title={title ? title : ""}
-									price={price ? price : ""}
-									date={startDate ? startDate.iso.toString() : ""}
-									time={startTime ? startTime : ""}
-									moveItem={this.moveItem}
-								/>)}
-							{!!isFetching && !itemsList && <div>Loading events...</div>}
-						</div>
+				{console.log(itemsList)}
+				{!!isFetching && <div>Loading events...</div>}
+				{!isFetching &&
+					itemsList.map((item, key) => {
+						const {
+							name,
+							title,
+							price,
+							startDate,
+							startTime
+						} = item.attributes;
+						// Render each event onto a draggable item
+						return (
+							<div key={key}>
+								{!!itemsList && (
+									<Item
+										key={item.id}
+										index={key}
+										id={item.id}
+										name={name ? name : "Parse didn't fetch name"}
+										title={title ? title : "Parse didn't fetch title"}
+										price={price ? price : ""}
+										date={startDate ? startDate.toString() : ""}
+										time={startTime}
+										moveItem={this.moveItem}
+									/>)}
+							</div>
+						)}
 					)}
-				)}
 				{!!errors && console.error(errors.error)}
 			</div>
 		);
