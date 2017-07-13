@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { applyMiddleware, createStore, compose } from "redux";
-import { persistStore, createTransform, autoRehydrate } from "redux-persist"
+import { persistStore, createTransform, autoRehydrate } from "redux-persist";
+import transformer from "./common/helpers/transformer";
 import localForage from "localforage";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
@@ -45,12 +46,13 @@ const store = createStore(
 	IndexReducer,
 	composeSetup(applyMiddleware(sagaMiddleware), autoRehydrate()) // allows redux devtools to watch sagas
 );
+
 // Begins periodically persisting the store
-// Redux-Persist assists in persists the state on browser refresh
 persistStore(store, {
 	storage: localForage,
-	blacklist: ["draggable"]
- }
+	blacklist: ["draggable"],
+	transforms: [transformer]
+ }, () => console.log("Rehydrated")
 );
 
 // Begin Index Saga
