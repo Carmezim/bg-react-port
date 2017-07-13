@@ -8,7 +8,6 @@ import {
 	FETCH_LIST,
 	FETCH_LIST_SUCCESS,
 	FETCH_LIST_ERROR
-
 } from "./actionTypes";
 
 const initialState = Immutable({
@@ -16,7 +15,8 @@ const initialState = Immutable({
 	isFetching: false,
 	requesting: false,
 	messages: [],
-	errors: []
+	errors: [],
+	rehydrated: false
 });
 
 // handles requests for items to be dragged by receiving current state
@@ -71,15 +71,16 @@ const reducer = (state = initialState, action) => {
 						body: "Fetching event list",
 						time: new Date()
 					}
-				])
+				]),
 			};
 
 		// Once data is successfully fetched the state is updated
 		case FETCH_LIST_SUCCESS:
+			console.log('success')
 			return {
 				...state,
 				isFetching: false,
-				itemsList: action.initialList,
+				itemsList: action.eventsList,
 				messages: []
 			};
 
@@ -88,7 +89,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				isFetching: false,
-				itemsList: action.itemsList,
+				itemsList: [],
 				errors: state.errors.concat([
 					{
 						body: action.error.toString(),
