@@ -76,11 +76,12 @@ const reducer = (state = initialState, action) => {
 
 		// Once data is successfully fetched the state is updated
 		case FETCH_LIST_SUCCESS:
-			console.log('success')
+			console.log("Fetch success");
+			console.log("fetched list", action.events);
 			return {
 				...state,
 				isFetching: false,
-				itemsList: action.eventsList,
+				itemsList: action.events,
 				messages: []
 			};
 

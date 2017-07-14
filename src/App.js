@@ -14,11 +14,16 @@ import "./App.css";
 
 // import actions
 import { unsetClient } from "./client/actions";
+import { fetchEvents } from "./draggableList/actions";
 
 class App extends Component {
 	static propTypes = {
 		children: PropTypes.node
 	};
+
+	componentDidMount() {
+		this.props.fetchEvents();
+	}
 
 	render() {
 		const { client: { token }, unsetClient } = this.props;
@@ -57,11 +62,12 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-	client: state.client
+	client: state.client,
+	draggable: state.draggable
 });
 
 const AppWithRouter = withRouter(
-	connect(mapStateToProps, { unsetClient })(App)
+	connect(mapStateToProps, { fetchEvents, unsetClient })(App)
 );
 
 export default AppWithRouter;

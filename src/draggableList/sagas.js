@@ -1,7 +1,16 @@
-import { call, fork, put, take, takeEvery, takeLatest } from "redux-saga/effects";
+import {
+	call,
+	fork,
+	put,
+	take,
+	cancel,
+	cancelled,
+	takeEvery,
+	takeLatest
+} from "redux-saga/effects";
 import ParseService from "../services/parseAPI";
 
-// import DnD actionTypes
+// import DnD action types
 import {
 	MOVE_ITEM_REQUEST,
 	MOVE_ITEM_SUCCESS,
@@ -11,22 +20,21 @@ import {
 	FETCH_LIST_ERROR
 } from "./actionTypes";
 
-// // import action
-// import { moveItemRequest } from "./actions";
-
 // Fetch current list to populate list when initializing
-function fetchList() {
-	return ParseService.loadEvents();
+function* fetchEventsList() {
+	const events = yield ParseService.loadEvents();
+	console.log("events fetched: ", events);
+	return events;
 }
 
-// as we cannot mutate our data we will use those helper
-// function to achieve deletion and insertion (to replace splice)
-// first we remove the item to be replaced
+// As we cannot mutate our data we will use those helper
+// function to achieve deletion and insertion (to replace splice).
+// First we remove the item to be replaced
 function removeListItem(listItems, dIndex) {
 	return listItems.slice(0, dIndex).concat(listItems.slice(dIndex + 1));
 }
 
-// then we insert the new one in its place
+// Then we insert the new one in its place
 function insert(arr, index, newItem) {
 	return [
 		// part of the array before the specified index
@@ -38,7 +46,7 @@ function insert(arr, index, newItem) {
 	];
 }
 
-// drag and drop move flow
+// DragDand drop move flow
 function* moveItem(reorderedList) {
 	try {
 		// receive new re-ordered list and on success dispatch
@@ -51,30 +59,46 @@ function* moveItem(reorderedList) {
 		yield put({ type: MOVE_ITEM_ERROR, error });
 	}
 }
-
-function* fetchListFlow() {
+// Populates events initial state
+function* loadEventsFlow() {
 	try {
-		// fetch list with parse call
-		const initialList = yield call(fetchList);
+		// Fetch the current events stored on the backend
+		const events = yield call(fetchEventsList);
 
-		// populate list state with fetched data and
+		console.log("laod data flow", events);
+		// Populate list state with fetched data and
 		// inform Redux fetching action completed successfully
-		yield put({ type: FETCH_LIST_SUCCESS, initialList });
+		yield put({ type: FETCH_LIST_SUCCESS, events });
 	} catch (error) {
-		yield put({ type: FETCH_LIST_ERROR, errors: error, itemsList: [] });
+		yield put({ type: FETCH_LIST_ERROR, errors: error });
+	} finally {
+		if (yield cancelled()) {
+			// handle cancelled if needed
+		}
 	}
+}
+
+function* loadEvents(){
+	const populateInitState = yield fork(loadEventsFlow);
+
+	yield take(FETCH_LIST_SUCCESS);
+
+	yield cancel(populateInitState);
 }
 
 // watch drag and drop actions
 function* dndWatcher() {
 	while (true) {
-		// fetch list on database and update the list
+		// Fetch list on database and update the list
 		// state calling 'fetchListFlow'
 		// then handle retrieving DnD move actions requests data
 		// by watching whenever an item is dragged
 		// and taking all the data sent on the action when it happens
 
-		yield takeEvery("FETCH_LIST", fetchListFlow);
+		// Listen to FETCH_LIST action dispatched when dashboard component
+		// finishes mounting and starts events flow that populates the
+		// app initial state with data from the backend
+		yield takeLatest(FETCH_LIST, loadEvents);
 
 		const { itemsList, dragIndex, hoverIndex, dragItem } = yield take(
 			MOVE_ITEM_REQUEST

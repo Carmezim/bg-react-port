@@ -40,10 +40,6 @@ class ItemsList extends Component {
 		);
 	}
 
-	// componentDidMount() {
-	// 	this.props.fetchEvents();
-	// }
-
 	render() {
 		const {
 			draggable: { isFetching, itemsList, requesting, messages, errors }
