@@ -99,15 +99,13 @@ class ParseService {
 	fetchEvents() {
 		const event = new Parse.Query("Event");
 
-		event.exists(
-			"name",
-			"objectId",
-			"price",
-			"startDate",
-			"startTime",
-			"title"
-		);
-
+		event.notEqualTo("name", null);
+		event.notEqualTo("objectId", null);
+		event.notEqualTo("objectId", null);
+		event.notEqualTo("price", null);
+		event.notEqualTo("startDate", null);
+		event.notEqualTo("startTime", null);
+		event.notEqualTo("title", null);
 		event.select(
 			"name",
 			"title",
