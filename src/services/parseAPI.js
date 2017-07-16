@@ -96,9 +96,17 @@ class ParseService {
 	}
 
 	//---------------------------DATA RELATED METHODS--------------------------
-	loadEvents() {
+	fetchEvents() {
 		const event = new Parse.Query("Event");
-		const resultArr = [];
+
+		event.exists(
+			"name",
+			"objectId",
+			"price",
+			"startDate",
+			"startTime",
+			"title"
+		);
 
 		event.select(
 			"name",
@@ -109,25 +117,14 @@ class ParseService {
 			"startTime",
 			"order"
 		);
-		event.exists(
-			"name",
-			"objectId",
-			"price",
-			"startDate",
-			"startTime",
-			"title"
-		);
-		event.ascending("sort_order");
+
 		event.limit(7);
+		event.ascending("sort_order");
 		// 'query.find' not filtering based on constraints
 		// maybe related https://github.com/parse-community/parse-server/issues/211
 		return event.find().then({
 			success: results => {
-				console.log("returned list");
-				console.log(results);
-				results.map(event => resultArr.push(event));
-				console.log("cool first 7 items result array: ", resultArr);
-				return resultArr;
+				console.log("Events fetched: ", results);
 			},
 			error: err => {
 				console.error(err);
@@ -135,20 +132,15 @@ class ParseService {
 		});
 	}
 
-	loadFullList() {
-		const event = new Parse.Query(this.EventClass);
-		const resultArr = [];
+	fetchFullList() {
+		const event = new Parse.Query("Event");
 
 		event.ascending("sort_order");
 		event.skip(7);
 		event.limit(20);	
 		event.find().then({
 			success: results => {
-				console.log("full list loaded on loadFullList call inside Parse API");
-				console.log(results);
-				results.map(event => resultArr.push(event));
-				console.log("cool full list result array: ", resultArr);
-				return resultArr;
+				console.log("full list loaded on loadFullList call inside Parse API", results);
 			},
 			error: err => {
 				console.error(err);
@@ -158,24 +150,37 @@ class ParseService {
 
 	createEvent(eventData) {
 		console.log("event data service API", eventData);
-		const event = new Parse.Query(this.EventClass);
+		const event = new Parse.Query("Events");
 
-		event.set("name", eventData.name);
-		event.set("address", eventData.address);
-		event.set("price", eventData.price);
-		event.set("venue", eventData.venue);
-		event.set("postCode", eventData.postCode);
-		event.set("description", eventData.description);
-		event.set("aboutEvent", eventData.aboutEvent);
-		event.set("banner", eventData.banner);
-		event.set("title", eventData.title);
-		event.save(null, {
+		event.save({
+			name: eventData.name,
+			address: eventData.address,
+			price: eventData.price,
+			venue: eventData.venue,
+			postCode: eventData.postCode,
+			description: eventData.description,
+			aboutEvent: eventData.aboutEvent,
+			banner: eventData.banner,
+			title: eventData.title
+		}, {
 			success: event => {
 				console.log("Successfuly saved submitted event!");
 			},
 			error: error => {
 				console.error(`Failed to save submitted event due to ${error}!`);
 			}
+		});
+	}
+
+	saveEventsList(eventsList) {
+		const Events = new Parse.Object.extend("Events");
+		const event = new Events();
+
+		event.set("sort_order", "ascending");
+		Parse.Object.saveAll(eventsList, {
+			success: list => console.log("Events list state successfully saved", list)
+			}, {
+			error: (list, error) => console.log("Failed to save events list due: ", error)
 		});
 	}
 }
