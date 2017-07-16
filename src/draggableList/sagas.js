@@ -1,13 +1,4 @@
-import {
-	call,
-	fork,
-	put,
-	take,
-	cancel,
-	cancelled,
-	takeEvery,
-	takeLatest
-} from "redux-saga/effects";
+import { call, fork, put, take, cancel, takeLatest } from "redux-saga/effects";
 import ParseService from "../services/parseAPI";
 
 // import DnD action types
@@ -22,9 +13,13 @@ import {
 
 // Fetch current list to populate list when initializing
 function* fetchEventsList() {
-	const events = yield ParseService.loadEvents();
-	console.log("events fetched: ", events);
+	const events = yield ParseService.fetchEvents();
 	return events;
+}
+
+// Save re-ordered list to the server
+function* saveEventsList(list) {
+	yield ParseService.saveEventsList(list);
 }
 
 // As we cannot mutate our data we will use those helper
@@ -51,6 +46,7 @@ function* moveItem(reorderedList) {
 	try {
 		// receive new re-ordered list and on success dispatch
 		// the new list, updating the state
+
 		yield put({ type: MOVE_ITEM_SUCCESS, reorderedList });
 
 		// continues to watch for requests
@@ -59,26 +55,24 @@ function* moveItem(reorderedList) {
 		yield put({ type: MOVE_ITEM_ERROR, error });
 	}
 }
+
 // Populates events initial state
 function* loadEventsFlow() {
 	try {
-		// Fetch the current events stored on the backend
+		// Initializes the call to fetch the
+		// current events stored on the backend
 		const events = yield call(fetchEventsList);
 
-		console.log("laod data flow", events);
 		// Populate list state with fetched data and
-		// inform Redux fetching action completed successfully
+		// inform Redux action completed successfully
 		yield put({ type: FETCH_LIST_SUCCESS, events });
 	} catch (error) {
-		yield put({ type: FETCH_LIST_ERROR, errors: error });
-	} finally {
-		if (yield cancelled()) {
-			// handle cancelled if needed
-		}
+		yield put({ type: FETCH_LIST_ERROR, error });
 	}
 }
 
-function* loadEvents(){
+// Watches for events to be successfully fetched
+function* loadEventsWatcher() {
 	const populateInitState = yield fork(loadEventsFlow);
 
 	yield take(FETCH_LIST_SUCCESS);
@@ -86,7 +80,8 @@ function* loadEvents(){
 	yield cancel(populateInitState);
 }
 
-// watch drag and drop actions
+// initiate populating state
+// and watch drag and drop actions
 function* dndWatcher() {
 	while (true) {
 		// Fetch list on database and update the list
@@ -95,10 +90,10 @@ function* dndWatcher() {
 		// by watching whenever an item is dragged
 		// and taking all the data sent on the action when it happens
 
-		// Listen to FETCH_LIST action dispatched when dashboard component
+		// Listen to FETCH_LIST action dispatched when App.js
 		// finishes mounting and starts events flow that populates the
 		// app initial state with data from the backend
-		yield takeLatest(FETCH_LIST, loadEvents);
+		yield takeLatest(FETCH_LIST, loadEventsWatcher);
 
 		const { itemsList, dragIndex, hoverIndex, dragItem } = yield take(
 			MOVE_ITEM_REQUEST
@@ -109,7 +104,7 @@ function* dndWatcher() {
 		const withoutPrevItem = yield call(removeListItem, itemsList, dragIndex);
 
 		// then we add it to the place where it will take on the list re-ordering the list
-		const reordereList = yield call(
+		const reorderedList = yield call(
 			insert,
 			withoutPrevItem,
 			hoverIndex,
@@ -117,9 +112,12 @@ function* dndWatcher() {
 		);
 
 		// at last we fork a new task sending the updated list to be dispatched and update the state
-		yield fork(moveItem, reordereList);
+		yield fork(moveItem, reorderedList);
 
-		// after 'moveItem' task is forked start to watch for errors
+		// then save re-ordered list to the server
+		yield call(saveEventsList, reorderedList);
+
+		// after the new list was saved start to watch for errors
 		yield take(MOVE_ITEM_ERROR);
 	}
 }

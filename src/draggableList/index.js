@@ -10,6 +10,7 @@ import Item from "../common/draganddrop/Item";
 
 // import action
 import { moveItemRequest } from "./actions";
+import { error } from "parse/lib/react-native/ParsePromise";
 
 class ItemsList extends Component {
 	constructor(props) {
@@ -31,7 +32,6 @@ class ItemsList extends Component {
 	moveItem(dragIndex, hoverIndex) {
 		const { draggable: itemsList } = this.props;
 		const dragItem = itemsList.itemsList[dragIndex];
-		console.log("Move Item", itemsList.itemsList)
 		this.props.moveItemRequest(
 			itemsList.itemsList,
 			dragIndex,
@@ -44,11 +44,8 @@ class ItemsList extends Component {
 		const {
 			draggable: { isFetching, itemsList, requesting, messages, errors }
 		} = this.props;
-		console.log(itemsList)
-		console.log(itemsList[0])
 		return (
 			<div className="draggable-list">
-				{console.log(itemsList)}
 				{!!isFetching && <div>Loading events...</div>}
 				{!isFetching &&
 					itemsList.map((item, key) => {
@@ -62,22 +59,22 @@ class ItemsList extends Component {
 						// Render each event onto a draggable item
 						return (
 							<div key={key}>
-								{!!itemsList && (
+								{!!itemsList &&
 									<Item
 										key={item.id}
 										index={key}
 										id={item.id}
-										name={name ? name : "Parse didn't fetch name"}
-										title={title ? title : "Parse didn't fetch title"}
+										name={name ? name : "Parse didn't fetch me (name)"}
+										title={title ? title : "Parse didn't fetch me (title)"}
 										price={price ? price : ""}
 										date={startDate ? startDate.toString() : ""}
 										time={startTime}
 										moveItem={this.moveItem}
-									/>)}
+									/>}
 							</div>
-						)}
-					)}
-				{!!errors && console.error(errors.error)}
+						);
+					})}
+				{!!errors && errors.map(error => console.error(error.body, error.time))}
 			</div>
 		);
 	}

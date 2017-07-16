@@ -16,7 +16,6 @@ export const moveItemRequest = (itemsList, dragIndex, hoverIndex, dragItem) => {
 };
 
 export const fetchEvents = () => {
-	console.log('fetch action')
 	return {
 		type: FETCH_LIST
 	};

@@ -54,7 +54,7 @@ const reducer = (state = initialState, action) => {
 				requesting: false,
 				errors: state.errors.concat([
 					{
-						body: action.error.toString(),
+						body: action.error.message.toString(),
 						time: new Date()
 					}
 				]),
@@ -71,13 +71,11 @@ const reducer = (state = initialState, action) => {
 						body: "Fetching event list",
 						time: new Date()
 					}
-				]),
+				])
 			};
 
 		// Once data is successfully fetched the state is updated
 		case FETCH_LIST_SUCCESS:
-			console.log("Fetch success");
-			console.log("fetched list", action.events);
 			return {
 				...state,
 				isFetching: false,
