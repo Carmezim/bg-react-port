@@ -4,6 +4,7 @@ import Immutable from "seamless-immutable";
 import {
 	MOVE_ITEM_REQUEST,
 	MOVE_ITEM_SUCCESS,
+	MOVE_ITEM_SECOND_SUCCESS,
 	MOVE_ITEM_ERROR,
 	FETCH_LIST,
 	FETCH_LIST_SUCCESS,
@@ -11,12 +12,12 @@ import {
 } from "./actionTypes";
 
 const initialState = Immutable({
-	itemsList: [],
+	mainList: [],
+	fullList: [],
 	isFetching: false,
 	requesting: false,
 	messages: [],
-	errors: [],
-	rehydrated: false
+	errors: []
 });
 
 // handles requests for items to be dragged by receiving current state
@@ -36,13 +37,23 @@ const reducer = (state = initialState, action) => {
 						body: "Requesting to move draggable item",
 						time: new Date()
 					}
-				]),
-				itemsList: action.itemsList
+				])
 			};
 
 		case MOVE_ITEM_SUCCESS:
+			console.log(action.sortedList)
 			return {
-				itemsList: action.reorderedList,
+				...state,
+				mainList: action.sortedList,
+				requesting: false,
+				messages: [],
+				error: []
+			};
+
+		case MOVE_ITEM_SECOND_SUCCESS:
+			return {
+				...state,
+				fullList: action.sortedList,
 				requesting: false,
 				messages: [],
 				error: []
@@ -79,7 +90,8 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				isFetching: false,
-				itemsList: action.events,
+				fullList: action.fullList,
+				mainList: action.mainList,
 				messages: []
 			};
 
@@ -88,7 +100,8 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				isFetching: false,
-				itemsList: [],
+				mainList: [],
+				fullList: [],
 				errors: state.errors.concat([
 					{
 						body: action.error.toString(),
