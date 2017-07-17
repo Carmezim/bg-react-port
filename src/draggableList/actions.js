@@ -5,10 +5,11 @@ import {
 	FETCH_LIST
 } from "./actionTypes";
 
-export const moveItemRequest = (itemsList, dragIndex, hoverIndex, dragItem) => {
+export const moveItemRequest = (list, dragIndex, hoverIndex, dragItem) => {
+	console.log("ACTION MOVE SORTED LIST", list);
 	return {
 		type: MOVE_ITEM_REQUEST,
-		itemsList,
+		list,
 		dragIndex,
 		hoverIndex,
 		dragItem
