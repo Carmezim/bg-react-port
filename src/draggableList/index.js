@@ -10,7 +10,6 @@ import Item from "../common/draganddrop/Item";
 
 // import action
 import { moveItemRequest } from "./actions";
-import { error } from "parse/lib/react-native/ParsePromise";
 
 class ItemsList extends Component {
 	constructor(props) {
@@ -21,7 +20,8 @@ class ItemsList extends Component {
 	static propTypes = {
 		moveItemRequest: PropTypes.func,
 		draggable: PropTypes.shape({
-			itemsList: PropTypes.array,
+			mainList: PropTypes.array,
+			fullList: PropTypes.array,
 			isFetching: PropTypes.bool,
 			requesting: PropTypes.bool,
 			messages: PropTypes.array,
@@ -29,26 +29,73 @@ class ItemsList extends Component {
 		})
 	};
 
-	moveItem(dragIndex, hoverIndex) {
-		const { draggable: itemsList } = this.props;
-		const dragItem = itemsList.itemsList[dragIndex];
-		this.props.moveItemRequest(
-			itemsList.itemsList,
-			dragIndex,
-			hoverIndex,
-			dragItem
-		);
+	moveItem(dragIndex, hoverIndex, whichList) {
+		const { draggable: { mainList, fullList } } = this.props;
+		let sortedList;
+
+		if (whichList === "SECOND") {
+			sortedList = fullList;
+			console.log("sortedList", sortedList);
+		} else {
+			sortedList = mainList;
+			console.log("sortedList", sortedList);
+		}
+		const dragItem = sortedList[dragIndex];
+		console.log(sortedList[dragIndex]);
+
+		this.props.moveItemRequest(sortedList, dragIndex, hoverIndex, dragItem);
 	}
 
 	render() {
 		const {
-			draggable: { isFetching, itemsList, requesting, messages, errors }
+			draggable: {
+				isFetching,
+				mainList,
+				fullList,
+				requesting,
+				messages,
+				errors
+			}
 		} = this.props;
 		return (
-			<div className="draggable-list">
-				{!!isFetching && <div>Loading events...</div>}
-				{!isFetching &&
-					itemsList.map((item, key) => {
+			<div className="draggable">
+				<div className="main-list">
+					{!!isFetching && <div>Loading events...</div>}
+					{!isFetching &&
+						!!mainList &&
+						mainList.map((item, key) => {
+							const {
+								name,
+								title,
+								price,
+								startDate,
+								startTime
+							} = item.attributes;
+							// Render each event onto a draggable item
+							return (
+								<div key={key}>
+									{!!mainList &&
+										<Item
+											key={item.id}
+											index={key}
+											id={item.id}
+											name={name}
+											title={title}
+											price={price}
+											date={startDate.toString()}
+											time={startTime}
+											moveItem={this.moveItem}
+											whichList="FIRST"
+										/>}
+								</div>
+							);
+						})}
+					{!!errors &&
+						errors.map(error => console.error(error.body, error.time))}
+				</div>
+				<div className="full-list">
+					<h2>Second List</h2>
+					{fullList.map((item, key) => {
 						const {
 							name,
 							title,
@@ -58,23 +105,24 @@ class ItemsList extends Component {
 						} = item.attributes;
 						// Render each event onto a draggable item
 						return (
-							<div key={key}>
-								{!!itemsList &&
+							<div key={item.id}>
+								{!!fullList &&
 									<Item
 										key={item.id}
-										index={key}
+										index={item.id}
 										id={item.id}
-										name={name ? name : "Parse didn't fetch me (name)"}
-										title={title ? title : "Parse didn't fetch me (title)"}
-										price={price ? price : ""}
-										date={startDate ? startDate.toString() : ""}
+										name={name}
+										title={title}
+										price={price}
+										date={startDate.toString()}
 										time={startTime}
 										moveItem={this.moveItem}
+										whichList="SECOND"
 									/>}
 							</div>
 						);
 					})}
-				{!!errors && errors.map(error => console.error(error.body, error.time))}
+				</div>
 			</div>
 		);
 	}
