@@ -5,6 +5,7 @@ import ParseService from "../services/parseAPI";
 import {
 	MOVE_ITEM_REQUEST,
 	MOVE_ITEM_SUCCESS,
+	MOVE_ITEM_SECOND_SUCCESS,
 	MOVE_ITEM_ERROR,
 	FETCH_LIST,
 	FETCH_LIST_SUCCESS,
@@ -13,8 +14,13 @@ import {
 
 // Fetch current list to populate list when initializing
 function* fetchEventsList() {
+	const listArr = [];
 	const events = yield ParseService.fetchEvents();
-	return events;
+	const fullList = yield ParseService.fetchFullList();
+	listArr.push(events);
+	listArr.push(fullList);
+
+	return listArr;
 }
 
 // Save re-ordered list to the server
@@ -47,8 +53,16 @@ function* moveItem(reorderedList) {
 		// receive new re-ordered list and on success dispatch
 		// the new list, updating the state
 
-		yield put({ type: MOVE_ITEM_SUCCESS, reorderedList });
-
+		// If isn't the main list
+		// we will inform Redux and update accordingly
+		console.log(reorderedList.length)
+		if (reorderedList.length <= 7) {
+			// update main list
+			yield put({ type: MOVE_ITEM_SUCCESS, reorderedList });
+		} else {
+			// update secondary list
+			yield put({ type: MOVE_ITEM_SECOND_SUCCESS, reorderedList });
+		}
 		// continues to watch for requests
 		yield call(dndWatcher);
 	} catch (error) {
@@ -61,11 +75,13 @@ function* loadEventsFlow() {
 	try {
 		// Initializes the call to fetch the
 		// current events stored on the backend
-		const events = yield call(fetchEventsList);
-
+		const eventsArr = yield call(fetchEventsList);
+		const mainList = eventsArr[0];
+		const fullList = eventsArr[1];
 		// Populate list state with fetched data and
 		// inform Redux action completed successfully
-		yield put({ type: FETCH_LIST_SUCCESS, events });
+
+		yield put({ type: FETCH_LIST_SUCCESS, mainList, fullList });
 	} catch (error) {
 		yield put({ type: FETCH_LIST_ERROR, error });
 	}
@@ -95,15 +111,16 @@ function* dndWatcher() {
 		// app initial state with data from the backend
 		yield takeLatest(FETCH_LIST, loadEventsWatcher);
 
-		const { itemsList, dragIndex, hoverIndex, dragItem } = yield take(
+		const { list, dragIndex, hoverIndex, dragItem } = yield take(
 			MOVE_ITEM_REQUEST
 		);
 
 		// then we reorder the list accordingly using the helper functions
 		// first we delete the dragged item from its previous place
-		const withoutPrevItem = yield call(removeListItem, itemsList, dragIndex);
+		const withoutPrevItem = yield call(removeListItem, list, dragIndex);
 
-		// then we add it to the place where it will take on the list re-ordering the list
+		// then we add it to the place where it will
+		// take on the list re-ordering the list
 		const reorderedList = yield call(
 			insert,
 			withoutPrevItem,
@@ -111,7 +128,8 @@ function* dndWatcher() {
 			dragItem
 		);
 
-		// at last we fork a new task sending the updated list to be dispatched and update the state
+		// at last we fork a new task sending the updated list to
+		// be dispatched and update the state
 		yield fork(moveItem, reorderedList);
 
 		// then save re-ordered list to the server
