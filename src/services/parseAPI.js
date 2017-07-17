@@ -97,7 +97,7 @@ class ParseService {
 
 	//---------------------------DATA RELATED METHODS--------------------------
 	fetchEvents() {
-		const event = new Parse.Query("Event");
+		const event = new Parse.Query(this.EventClass);
 
 		event.notEqualTo("name", null);
 		event.notEqualTo("objectId", null);
@@ -117,9 +117,9 @@ class ParseService {
 		);
 
 		event.limit(7);
-		event.ascending("sort_order");
 		// 'query.find' not filtering based on constraints
 		// maybe related https://github.com/parse-community/parse-server/issues/211
+		console.log("Fetching list");
 		return event.find().then({
 			success: results => {
 				console.log("Events fetched: ", results);
@@ -131,14 +131,32 @@ class ParseService {
 	}
 
 	fetchFullList() {
-		const event = new Parse.Query("Event");
+		const event = new Parse.Query(this.EventClass);
 
-		event.ascending("sort_order");
-		event.skip(7);
-		event.limit(20);	
-		event.find().then({
+		event.notEqualTo("name", null);
+		event.notEqualTo("objectId", null);
+		event.notEqualTo("objectId", null);
+		event.notEqualTo("price", null);
+		event.notEqualTo("startDate", null);
+		event.notEqualTo("startTime", null);
+		event.notEqualTo("title", null);
+		event.select(
+			"name",
+			"title",
+			"address",
+			"price",
+			"startDate",
+			"startTime",
+			"order"
+		);
+		event.skip(7)
+		event.limit(20);
+		// 'query.find' not filtering based on constraints
+		// maybe related https://github.com/parse-community/parse-server/issues/211
+		console.log("Fetching full list");
+		return event.find().then({
 			success: results => {
-				console.log("full list loaded on loadFullList call inside Parse API", results);
+				console.log("Events fetched: ", results);
 			},
 			error: err => {
 				console.error(err);
@@ -146,40 +164,53 @@ class ParseService {
 		});
 	}
 
-	createEvent(eventData) {
-		console.log("event data service API", eventData);
-		const event = new Parse.Query("Events");
+	saveEventsList(eventsList) {
+		const event = new this.EventClass();
+		const eventArr = [];
 
-		event.save({
-			name: eventData.name,
-			address: eventData.address,
-			price: eventData.price,
-			venue: eventData.venue,
-			postCode: eventData.postCode,
-			description: eventData.description,
-			aboutEvent: eventData.aboutEvent,
-			banner: eventData.banner,
-			title: eventData.title
-		}, {
-			success: event => {
-				console.log("Successfuly saved submitted event!");
-			},
-			error: error => {
-				console.error(`Failed to save submitted event due to ${error}!`);
-			}
-		});
+		// eventsList.map(event => {
+		// 	event.set("name", event.attributes.name);
+		// 	event.set("title", event.attributes.title);
+		// 	eventArr.push(event.attributes)
+		// 	event.save(eventArr);
+		// });
+		console.log(eventsList);
+		event.set("sort_order", "ascending");
+		Parse.Object.saveAll(
+			eventsList).then(
+				list =>
+					console.log("Events list state successfully saved", list),
+				error =>
+					console.log("Failed to save events list due: ", error)
+
+		);
 	}
 
-	saveEventsList(eventsList) {
-		const Events = new Parse.Object.extend("Events");
-		const event = new Events();
+	createEvent(eventData) {
+		console.log("event data service API", eventData);
+		const event = new Parse.Query(this.EventClass);
 
-		event.set("sort_order", "ascending");
-		Parse.Object.saveAll(eventsList, {
-			success: list => console.log("Events list state successfully saved", list)
-			}, {
-			error: (list, error) => console.log("Failed to save events list due: ", error)
-		});
+		event.save(
+			{
+				name: eventData.name,
+				address: eventData.address,
+				price: eventData.price,
+				venue: eventData.venue,
+				postCode: eventData.postCode,
+				description: eventData.description,
+				aboutEvent: eventData.aboutEvent,
+				banner: eventData.banner,
+				title: eventData.title
+			},
+			{
+				success: event => {
+					console.log("Successfuly saved submitted event!");
+				},
+				error: error => {
+					console.error(`Failed to save submitted event due to ${error}!`);
+				}
+			}
+		);
 	}
 }
 
