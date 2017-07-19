@@ -1,0 +1,90 @@
+.panel-content {
+	width: 90%;
+	height: 100%;
+	display: inline-block;
+	vertical-align: top;
+	padding: 15px 0;
+}
+.panel-image {
+	width: 10%;
+	padding: 5px;
+	float: left;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	overflow: hidden;
+}
+.pan-title {
+	width: 15%;
+	padding-left: 10px;
+}
+.adult .pan-age {
+	display: none;
+}
+.pan-order {
+	width: 9% !important;
+}
+.pan-other {
+	width: 5%;
+}
+.pan-other.panel-admin {
+	width: 15%;
+}
+.pan-event-title {
+	width: 21% !important;
+}
+.pan-author-title {
+	width: 28.5% !important;
+	text-align: left;
+}
+.pan-banner {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	padding: 3px;
+}
+.adult .pan-banner {
+	background-color: #00CDFF;
+}
+.children .pan-banner {
+	background-color: #FFEB3B !important;
+}
+.adult .pan-banner p {
+	font-size: 12px;
+	color: #FFFFFF;
+}
+.children .pan-banner p {
+	font-size: 12px;
+	color: #004F68;
+}
+.pan-event-title,
+.tab-content .pan-event-title p {
+	text-align: left !important;
+}
+.pan-date {
+	width: 10%;
+	text-align: center;
+}
+.col-same {
+	width: 10%;
+	text-align: center;
+}
+.panel-image img {
+	width: 100%;
+}
+.container {
+	transition: all 0.2s ease-in-out;
+	margin: 0 0 0 240px;
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+	padding-bottom: 80px;
+}
+.container-inner {
+	max-width: 1020px;
+	width: 75%;
+}
+.pan-col {
+	display: inline-block;
+	vertical-align: top;
+}
