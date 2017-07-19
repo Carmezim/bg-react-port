@@ -8,6 +8,7 @@ import { getFormValues, reset } from "redux-form";
 // import components
 import EventTemplate from "../common/forms/EventForm";
 import ItemsList from "../draggableList";
+import ListHeader from "../common/headers/ListsHeader";
 import NavBar from "../common/navigation/NavBar";
 // import actions
 import { eventCreate, eventRequest } from "./actions";
@@ -58,15 +59,14 @@ class Dashboard extends Component {
 		return (
 			<div className="admin-dashboard">
 				<NavBar />
+				<ListHeader />
 				<ItemsList />
 				<h1>Dashboard</h1>
 				<div className="create-event-form">
 					<div>
 						<EventTemplate ref="eventForm" onSubmit={this.handleSubmit} />
 					</div>
-					<hr />
 				</div>
-				<div className="intinite-list">infinite list will go here</div>
 			</div>
 		);
 	}
@@ -75,7 +75,7 @@ class Dashboard extends Component {
 // Getting only the piece of state we need for this component from the global state
 const mapStateToProps = state => ({
 	client: state.client,
-	dashboard: state.dashboard,
+	dashboard: state.dashboard
 });
 
 // Making the login state piece we've got and our actions
