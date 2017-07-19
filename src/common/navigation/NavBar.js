@@ -26,7 +26,7 @@ const NavBar = props => {
 						Hidden
 					</NavLink>
 				</li>
-				<li class="tab-group-adult">
+				<li className="tab-group-adult">
 					<NavLink exact activeClassName="active" to="/dashboard/adult/hidden">
 						Past
 					</NavLink>
