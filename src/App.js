@@ -54,6 +54,7 @@ class App extends Component {
 							component={EventForm}
 						/>
 						<Route exact path="/" component={Signup} />
+						<Route render={() => <div>Not Found :(</div>} />
 					</Switch>
 				</section>
 			</div>
