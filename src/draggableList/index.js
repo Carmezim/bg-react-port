@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import flow from "lodash/flow";
 import { DragDropContext } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
+import ReactList from "react-list";
 
 // import component
 import Item from "../common/draganddrop/Item";
@@ -15,6 +16,7 @@ class ItemsList extends Component {
 	constructor(props) {
 		super(props);
 		this.moveItem = this.moveItem.bind(this);
+		this.renderItem = this.renderItem.bind(this);
 	}
 
 	static propTypes = {
@@ -28,6 +30,40 @@ class ItemsList extends Component {
 			error: PropTypes.array
 		})
 	};
+
+	// React=List will iterate through the secondary
+	// events list (fullList) rendering each of its item
+	// as a draggable item using the 'Item' component
+	renderItem(index, key) {
+		const { draggable: fullList } = this.props;
+		const list = fullList.fullList;
+		const {
+			name,
+			title,
+			ages,
+			price,
+			startDate,
+			startTime
+		} = list[index].attributes;
+		return (
+			<div key={list[index].id}>
+				{!!list &&
+					<Item
+						key={list[index].id}
+						index={key}
+						id={list[index].id}
+						name={name}
+						title={title}
+						price={price}
+						date={startDate.toString()}
+						ages={ages}
+						time={startTime}
+						moveItem={this.moveItem}
+						whichList="SECOND"
+					/>}
+			</div>
+		);
+	}
 
 	moveItem(dragIndex, hoverIndex, whichList) {
 		const { draggable: { mainList, fullList } } = this.props;
@@ -69,6 +105,7 @@ class ItemsList extends Component {
 								title,
 								price,
 								startDate,
+								ages,
 								startTime
 							} = item.attributes;
 							// Render each event onto a draggable item
@@ -83,6 +120,7 @@ class ItemsList extends Component {
 											title={title}
 											price={price}
 											date={startDate.toString()}
+											ages={ages}
 											time={startTime}
 											moveItem={this.moveItem}
 											whichList="FIRST"
@@ -93,35 +131,12 @@ class ItemsList extends Component {
 					{!!errors &&
 						errors.map(error => console.error(error.body, error.time))}
 				</div>
-				<div className="full-list">
-					<h2>Second List</h2>
-					{fullList.map((item, key) => {
-						const {
-							name,
-							title,
-							price,
-							startDate,
-							startTime
-						} = item.attributes;
-						// Render each event onto a draggable item
-						return (
-							<div key={item.id}>
-								{!!fullList &&
-									<Item
-										key={item.id}
-										index={item.id}
-										id={item.id}
-										name={name}
-										title={title}
-										price={price}
-										date={startDate.toString()}
-										time={startTime}
-										moveItem={this.moveItem}
-										whichList="SECOND"
-									/>}
-							</div>
-						);
-					})}
+				<div style={{ overflow: "auto", maxHeight: 900 }}>
+					<ReactList
+						itemRenderer={this.renderItem}
+						length={fullList.length}
+						type="uniform"
+					/>
 				</div>
 			</div>
 		);
