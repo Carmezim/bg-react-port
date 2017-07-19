@@ -6,7 +6,7 @@ import ItemTypes from "./ItemTypes";
 import { flow } from "lodash";
 
 const style = {
-	border: "1px dashed gray",
+	border: "1px dashed black",
 	padding: "0.5rem 1rem",
 	marginBottom: ".5rem",
 	backgroundColor: "white",
@@ -106,6 +106,7 @@ class Item extends Component {
 
 	render() {
 		const {
+			ages,
 			date,
 			name,
 			price,
@@ -134,16 +135,19 @@ class Item extends Component {
 								{title}
 							</p>
 						</div>
-
 						<div className="pan-col pan-date">
 							<p>
 								{date}
 							</p>
 						</div>
-
 						<div className="pan-col col-same pan-price">
 							<p>
 								{price}
+							</p>
+						</div>
+						<div className="pan-col col-same pan-ages">
+							<p>
+								{ages}
 							</p>
 						</div>
 					</div>
