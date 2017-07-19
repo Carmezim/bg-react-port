@@ -55,7 +55,7 @@ function* moveItem(reorderedList) {
 
 		// If isn't the main list
 		// we will inform Redux and update accordingly
-		console.log(reorderedList.length)
+		console.log(reorderedList.length);
 		if (reorderedList.length <= 7) {
 			// update main list
 			yield put({ type: MOVE_ITEM_SUCCESS, reorderedList });

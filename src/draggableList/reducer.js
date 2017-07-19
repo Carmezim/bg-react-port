@@ -41,7 +41,7 @@ const reducer = (state = initialState, action) => {
 			};
 
 		case MOVE_ITEM_SUCCESS:
-			console.log(action.sortedList)
+			console.log(action.sortedList);
 			return {
 				...state,
 				mainList: action.sortedList,
