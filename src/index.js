@@ -48,11 +48,14 @@ const store = createStore(
 );
 
 // Begins periodically persisting the store
-persistStore(store, {
-	storage: localForage,
-	blacklist: ["draggable"],
-	transforms: [transformer]
- }, () => console.log("Rehydrated")
+persistStore(
+	store,
+	{
+		storage: localForage,
+		blacklist: ["draggable"],
+		transforms: [transformer]
+	},
+	() => console.log("Rehydrated")
 );
 
 // Begin Index Saga
