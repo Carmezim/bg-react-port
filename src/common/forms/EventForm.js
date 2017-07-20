@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Field, reduxForm, formValueSelector } from "redux-form";
+import { Link } from "react-router-dom";
 import flow from "lodash/flow";
 
 // import components
@@ -166,6 +167,7 @@ const EventTemplate = props => {
 				<button disabled={invalid} type="submit">
 					Create
 				</button>
+				<Link to="/dashboard">Cancel</Link>
 			</form>
 		</div>
 	);
