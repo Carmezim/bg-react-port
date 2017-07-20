@@ -4,6 +4,7 @@ import { Switch } from "react-router-dom";
 import PropTypes from "prop-types";
 import PrivateRoute from "./common/authentication/AuthRoute";
 import { Route, withRouter } from "react-router-dom";
+import { reset} from "redux-form";
 
 // Import all components
 import Login from "./login";
@@ -15,15 +16,32 @@ import "./App.css";
 // import actions
 import { unsetClient } from "./client/actions";
 import { fetchEvents } from "./draggableList/actions";
+import { eventCreate } from "./dashboard/actions";
 
 class App extends Component {
 	static propTypes = {
 		children: PropTypes.node
 	};
 
+	// Populate initial state with
+	// events data from the database
+	// when 'Appp' component renders
 	componentDidMount() {
 		this.props.fetchEvents();
 	}
+
+	// submit handler provided to Redux Form
+	// we call 'eventCreate' imported from 'dashboard' actions
+	// which will be listened by the 'dashboard' sagas and
+	// handle the API calls passing the data submitted
+	// from the form to the database
+	handleSubmit = event => {
+		const { eventCreate, reset } = this.props;
+		// call to our widgetCreate action.
+		eventCreate(event);
+		// reset the form upon submit.
+		reset("eventForm");
+	};
 
 	render() {
 		const { client: { token }, unsetClient } = this.props;
@@ -46,20 +64,21 @@ class App extends Component {
 							isPrivate={true}
 							exact
 							path="/dashboard"
-							component={Dashboard}
+							render={() => <Dashboard />}
 						/>
 						<PrivateRoute
 							token={token}
 							isPrivate={true}
+							exact
 							path="/dashboard"
-							component={NavBar}
+							render={() => <NavBar />}
 						/>
 						<PrivateRoute
 							token={token}
 							isPrivate={true}
 							exact
 							path="/dashboard/create"
-							component={EventTemplate}
+							render={() => <EventTemplate onSubmit={this.handleSubmit} />}
 						/>
 						<Route exact path="/" component={Signup} />
 						<Route render={() => <div>Not Found :(</div>} />
@@ -76,7 +95,7 @@ const mapStateToProps = state => ({
 });
 
 const AppWithRouter = withRouter(
-	connect(mapStateToProps, { fetchEvents, unsetClient })(App)
+	connect(mapStateToProps, { fetchEvents, unsetClient, eventCreate, reset })(App)
 );
 
 export default AppWithRouter;
