@@ -9,9 +9,9 @@ import { Route, withRouter } from "react-router-dom";
 import Login from "./login";
 import Dashboard from "./dashboard";
 import Signup from "./signup";
+import NavBar from "./common/navigation/NavBar";
 import EventTemplate from "./common/forms/EventForm";
 import "./App.css";
-
 // import actions
 import { unsetClient } from "./client/actions";
 import { fetchEvents } from "./draggableList/actions";
@@ -51,6 +51,13 @@ class App extends Component {
 						<PrivateRoute
 							token={token}
 							isPrivate={true}
+							path="/dashboard"
+							component={NavBar}
+						/>
+						<PrivateRoute
+							token={token}
+							isPrivate={true}
+							exact
 							path="/dashboard/create"
 							component={EventTemplate}
 						/>

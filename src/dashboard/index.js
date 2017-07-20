@@ -1,15 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-// import ReactCrop from 'react-image-crop';
-import ReactList from "react-list";
 import { connect } from "react-redux";
 import { getFormValues, reset } from "redux-form";
-
+import { Link } from "react-router-dom";
 // import components
 import EventTemplate from "../common/forms/EventForm";
 import ItemsList from "../draggableList";
 import ListHeader from "../common/headers/ListsHeader";
-import NavBar from "../common/navigation/NavBar";
 // import actions
 import { eventCreate, eventRequest } from "./actions";
 
@@ -58,14 +55,12 @@ class Dashboard extends Component {
 
 		return (
 			<div className="admin-dashboard">
-				<NavBar />
+				<h1>Dashboard</h1>
+				<Link to="/dashboard/create">Create Event</Link>
 				<ListHeader />
 				<ItemsList />
-				<h1>Dashboard</h1>
 				<div className="create-event-form">
-					<div>
-						<EventTemplate ref="eventForm" onSubmit={this.handleSubmit} />
-					</div>
+					<EventTemplate ref="eventForm" onSubmit={this.handleSubmit} />
 				</div>
 			</div>
 		);
