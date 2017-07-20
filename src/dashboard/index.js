@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 import { getFormValues, reset } from "redux-form";
 import { Link } from "react-router-dom";
 // import components
-import EventTemplate from "../common/forms/EventForm";
 import ItemsList from "../draggableList";
 import ListHeader from "../common/headers/ListsHeader";
+import EventTemplate from "../common/forms/EventForm";
 // import actions
 import { eventCreate, eventRequest } from "./actions";
 
@@ -57,6 +57,7 @@ class Dashboard extends Component {
 			<div className="admin-dashboard">
 				<h1>Dashboard</h1>
 				<Link to="/dashboard/create">Create Event</Link>
+				{/*<EventTemplate onSubmit={this.handleSubmit} />*/}
 				<ListHeader />
 				<ItemsList />
 			</div>

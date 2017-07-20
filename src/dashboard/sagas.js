@@ -14,16 +14,17 @@ function eventRequest() {
 	return ParseService.loadEvents();
 }
 
-function eventCreate(event) {
+function createEvent(event) {
 	ParseService.createEvent(event);
 }
 
 function* eventCreateFlow(action) {
 	try {
 		const { event } = action;
+		console.log(event);
+		yield call(createEvent, event);
 
-		const createEvent = yield call(eventCreate, event);
-		// TODO: implement Parse method to create event and add it here
+		yield put(eventCreateSuccess(event));
 	} catch (error) {
 		yield put(eventCreateError(error));
 	}
@@ -32,7 +33,7 @@ function* eventCreateFlow(action) {
 function* eventRequestFlow(action) {
 	try {
 		// call Parse to return events
-		const events = yield call(eventRequest);
+		const events = yield call(eventRequest, action);
 		console.log("sagas fetched events", action);
 		// if there is a token we inform Redux the request was successful
 		yield put(eventRequestSuccess(events));

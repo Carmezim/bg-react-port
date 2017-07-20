@@ -17,6 +17,7 @@ const initialState = Immutable({
 });
 
 const reducer = (state = initialState, action) => {
+	console.log("creating event");
 	switch (action.type) {
 		case EVENT_CREATING:
 			return {
@@ -35,8 +36,9 @@ const reducer = (state = initialState, action) => {
 		// On success include the new event into the list
 		// this list will render later.
 		case EVENT_CREATE_SUCCESS:
+			console.log("event create success", action.event);
 			return {
-				list: state.list.concat([action.event]),
+				...state,
 				requesting: false,
 				successful: true,
 				messages: [

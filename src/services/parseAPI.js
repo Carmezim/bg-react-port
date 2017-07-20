@@ -149,7 +149,7 @@ class ParseService {
 			"startTime",
 			"order"
 		);
-		event.skip(7)
+		event.skip(7);
 		event.limit(20);
 		// 'query.find' not filtering based on constraints
 		// maybe related https://github.com/parse-community/parse-server/issues/211
@@ -176,20 +176,18 @@ class ParseService {
 		// });
 		console.log(eventsList);
 		event.set("sort_order", "ascending");
-		Parse.Object.saveAll(
-			eventsList).then(
-				list =>
-					console.log("Events list state successfully saved", list),
-				error =>
-					console.log("Failed to save events list due: ", error)
-
-		);
+		Parse.Object
+			.saveAll(eventsList)
+			.then(
+				list => console.log("Events list state successfully saved", list),
+				error => console.log("Failed to save events list due: ", error)
+			);
 	}
 
 	createEvent(eventData) {
-		console.log("event data service API", eventData);
-		const event = new Parse.Query(this.EventClass);
-
+		const event = new this.EventClass();
+		const banner = []; // temporary workaround for banner array
+		banner.push(eventData.banner);
 		event.save(
 			{
 				name: eventData.name,
@@ -199,15 +197,15 @@ class ParseService {
 				postCode: eventData.postCode,
 				description: eventData.description,
 				aboutEvent: eventData.aboutEvent,
-				banner: eventData.banner,
+				banner: banner,
 				title: eventData.title
 			},
 			{
-				success: event => {
-					console.log("Successfuly saved submitted event!");
+				success: eventData => {
+					console.log("Successfuly saved submitted event!", eventData);
 				},
 				error: error => {
-					console.error(`Failed to save submitted event due to ${error}!`);
+					console.error("Failed to save submitted event due to ", error);
 				}
 			}
 		);
