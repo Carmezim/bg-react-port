@@ -59,9 +59,6 @@ class Dashboard extends Component {
 				<Link to="/dashboard/create">Create Event</Link>
 				<ListHeader />
 				<ItemsList />
-				<div className="create-event-form">
-					<EventTemplate ref="eventForm" onSubmit={this.handleSubmit} />
-				</div>
 			</div>
 		);
 	}
