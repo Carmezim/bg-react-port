@@ -9,7 +9,7 @@ import { Route, withRouter } from "react-router-dom";
 import Login from "./login";
 import Dashboard from "./dashboard";
 import Signup from "./signup";
-import EventForm from "./common/forms/EventForm";
+import EventTemplate from "./common/forms/EventForm";
 import "./App.css";
 
 // import actions
@@ -44,14 +44,15 @@ class App extends Component {
 						<PrivateRoute
 							token={token}
 							isPrivate={true}
+							exact
 							path="/dashboard"
 							component={Dashboard}
 						/>
 						<PrivateRoute
 							token={token}
 							isPrivate={true}
-							path="/addevent"
-							component={EventForm}
+							path="/dashboard/create"
+							component={EventTemplate}
 						/>
 						<Route exact path="/" component={Signup} />
 						<Route render={() => <div>Not Found :(</div>} />
