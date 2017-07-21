@@ -17,7 +17,8 @@ const itemSource = {
 	beginDrag(props) {
 		return {
 			id: props.id,
-			index: props.index
+			index: props.index,
+			list: props.whichList
 		};
 	},
 	isDragging(props, monitor) {
@@ -27,6 +28,8 @@ const itemSource = {
 
 const itemTarget = {
 	hover(props, monitor, component) {
+		console.log("item", monitor.getItem());
+		const item = monitor.getItem();
 		const dragIndex = monitor.getItem().index;
 		const hoverIndex = props.index;
 
@@ -59,6 +62,10 @@ const itemTarget = {
 		// Dragging upwards
 		if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
 			return;
+		}
+
+		if (item.list !== props.whichList) {
+			item.list = props.whichList;
 		}
 
 		// Time to actually perform the action
@@ -101,7 +108,8 @@ class Item extends Component {
 		title: PropTypes.string.isRequired,
 		date: PropTypes.string.isRequired,
 		price: PropTypes.string.isRequired,
-		time: PropTypes.string
+		time: PropTypes.string,
+		whichList: PropTypes.string.isRequired
 	};
 
 	render() {
