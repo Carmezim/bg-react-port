@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getFormValues, reset } from "redux-form";
 import { Link } from "react-router-dom";
 // import components
 import ItemsList from "../draggableList";
 import ListHeader from "../common/headers/ListsHeader";
-import EventTemplate from "../common/forms/EventForm";
 // import actions
-import { eventCreate, eventRequest } from "./actions";
+import { eventRequest } from "./actions";
 
 class Dashboard extends Component {
 	// prop validation
@@ -38,18 +36,9 @@ class Dashboard extends Component {
 		if (client && client.token) return eventRequest(client);
 	};
 
-	// submit event form data
-	handleSubmit = event => {
-		const { eventCreate, reset } = this.props;
-		// call to our widgetCreate action.
-		eventCreate(event);
-		// reset the form upon submit.
-		reset("eventForm");
-	};
-
 	render() {
 		const {
-			client,
+			client: { token },
 			dashboard: { list, requesting, successful, messages, errors }
 		} = this.props;
 
@@ -57,7 +46,6 @@ class Dashboard extends Component {
 			<div className="admin-dashboard">
 				<h1>Dashboard</h1>
 				<Link to="/dashboard/create">Create Event</Link>
-				{/*<EventTemplate onSubmit={this.handleSubmit} />*/}
 				<ListHeader />
 				<ItemsList />
 			</div>
@@ -75,8 +63,6 @@ const mapStateToProps = state => ({
 // available in this.props within this component (Dashboard)
 // const connected = connect(mapStateToProps, { createEvent })(Dashboard);
 const connected = connect(mapStateToProps, {
-	reset,
-	eventCreate,
 	eventRequest
 })(Dashboard);
 
