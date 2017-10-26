@@ -1,35 +1,14 @@
-## BookGig React App
+## BG React App Port
+
+Previous initial work on a (fullstack) Node/React port project of a pure JS/jQuery existing app. 
+The most significant challenges were dealing with a big and confusing codebase poorly documented, filled with bad practices and anti-patterns spreaded out throughout the old codebase. The lack of frameworks and/or libraries besides jQuery contributed
+to the difficulties of porting this app to current stacks and best practices as navigating through the legacy codebase was challenging in itself. Despite such downsides I left the project on a very advanced point, easy to be maintained, decently documented and on the path to be finished.
 
 ### Requirements
 
 * [Node](https://nodejs.org/en/)
 * [MongoDB](https://docs.mongodb.com/manual/installation/#mongodb-community-edition)
 * [Yarn](https://yarnpkg.com/lang/en/docs/install/) or NPM
-
-
-### Getting it up and running
-
-1.`git clone git@bitbucket.org:lab19digital/authorslive.git && cd authorslive`
-
-2.`git fetch && git checkout bookgig-react`
-
-3.`yarn install`
-
-4.`mkdir ./mongodb`
-
-5.Download the [Mongo database dump](https://bitbucket.org/lab19digital/authorslive/downloads/dump)
-
-6.Run `yarn mongo` then in another terminal instance `mongorestore --archive=/path/to/dump/dumpfile --db bookgig`
-
-7.`yarn start` and start developing! (remember to login on Parse Dashboard on localhost:1337/dashboard)
-
-8.To build simply run `yarn build`
-
-
-**Important Note**: Currently the configuration is abstracted away. At the moment it may not be necessary
-although to change the configuration run `yarn eject`.
-Notice once ejected, the project cannot return to its initial structure and all configuration
-files will be exposed.
 
 ### Project structure:
 
@@ -59,7 +38,3 @@ Abstraction facades for external API (where Parse JS-SDK layer resides).
 `/mongodb` All MongoDB related files.
 
 `/parse` All Parse Server files.  
-
-
-
-**Note**: The Readme will be continuously updated.
