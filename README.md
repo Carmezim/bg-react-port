@@ -38,3 +38,5 @@ Abstraction facades for external API (where Parse JS-SDK layer resides).
 `/mongodb` All MongoDB related files.
 
 `/parse` All Parse Server files.  
+
+Copyright © 2017 Adriano Carmezim
