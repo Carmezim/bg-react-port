@@ -4,11 +4,6 @@ Previous initial work on a (fullstack) Node/Mongo/React port project of a pure J
 The most significant challenges were dealing with a huge and confusing codebase, very poorly documented and filled with bad practices and anti-patterns throughout the old codebase. The lack of frameworks and/or libraries besides jQuery contributed
 to the difficulties of porting this app to current stacks and best practices as navigating through the legacy codebase was challenging in itself. Despite those aspects I brought the project to a very advanced point, easy to be maintained, decently documented and on the path to be finished.
 
-### Requirements
-
-* [Node](https://nodejs.org/en/)
-* [MongoDB](https://docs.mongodb.com/manual/installation/#mongodb-community-edition)
-* [Yarn](https://yarnpkg.com/lang/en/docs/install/) or NPM
 
 ### Project structure:
 
